@@ -1,0 +1,36 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.402(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Outfeed During Homing"]                 FN99;Comment
+   2    REM["----------------------------------"]    FN99;Comment
+   3    IF I0002=0 AND I0003=0 THEN 24 ELSE 4        FN602;Condition
+   4    CALLP[400]                                   FN80;Program call
+                  Program Name:Outfeed Approach
+   5    REM[""]                                      FN99;Comment
+   6    REM["Load outfeed conveyor"]                 FN99;Comment
+   7    REM["Select part"]                           FN99;Comment
+   8    REM["----------------------------------"]    FN99;Comment
+   9    REM["Gripper 1 Part Present"]                FN99;Comment
+  10    IF I0002=0 THEN 14 ELSE 11                   FN602;Condition
+  11    SETMD[O13,1,0,2]                             FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Outfeed Clear
+  12    CALLP[406]                                   FN80;Program call
+                  Program Name:Outfeed Gripper 1
+  13    REM["----------------------------------"]    FN99;Comment
+  14    REM["Gripper 2 Part Present"]                FN99;Comment
+  15    IF I0003=0 THEN 18 ELSE 16                   FN602;Condition
+  16    SETMD[O13,1,0,1]                             FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Outfeed Clear
+  17    CALLP[410]                                   FN80;Program call
+                  Program Name:Outfeed Left MC Part 1
+  18    REM["Program end"]                           FN99;Comment
+  19    REM["----------------------------------"]    FN99;Comment
+  20   75.0%      JOINT   A2   T1  D1                    V
+                  'At outfeed
+  21    DELAY[1]                                     FN50;Timer delay
+  22    SETM[O9,1]                                   FN105;Output signal
+                  Signal Name :Clear of conveyors
+  23    SETMD[O13,1,0,1]                             FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Outfeed Clear
+  24    END                                          FN92;End
+Program List End

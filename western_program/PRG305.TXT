@@ -1,0 +1,11 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.305(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Right MC Start"]                        FN99;Comment
+   2    REM["----------------------------------"]    FN99;Comment
+   3    SETMD[O1014,1,0,2]                           FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Right MC Load complete
+   4    WAITJ[I1010]                                 FN526;Wait not Input cond
+                  Signal Name :Right MC Ready To Load
+   5    END                                          FN92;End
+Program List End

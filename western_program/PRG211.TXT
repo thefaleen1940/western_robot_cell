@@ -1,0 +1,13 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.211(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Left MC Clamp OP 20"]                   FN99;Comment
+   2    REM["----------------------------------"]    FN99;Comment
+   3    *[Top]                                       FN601;Label
+   4    SETMD[O1001,1,0,1]                           FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Left MC OP 20 Clamp
+   5    WAITI[I1004]                                 FN525;Wait Input cond
+                  Signal Name :Left MC OP 20 Clamped
+   6    DELAY[0.1]                                   FN50;Timer delay
+   7    END                                          FN92;End
+Program List End

@@ -1,0 +1,71 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.009(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Main Operation, 2 Machines, 2 Grips"]   FN99;Comment
+   2    REM["---------------------------------"]     FN99;Comment
+   3    CALLP[11]                                    FN80;Program call
+                  Program Name:Home check
+   4    CALLP[10]                                    FN80;Program call
+                  Program Name:Init data
+   5    *[LBL2]                                      FN601;Label
+   6    REM["---------------------------------"]     FN99;Comment
+   7    REM["Part Select"]                           FN99;Comment
+   8    IF V301%=1 THEN 9 ELSE 12                    FN602;Condition
+   9    CALLP[15]                                    FN80;Program call
+                  Program Name:Main Part 1 Insert
+  10    JMP[5]                                       FN20;Step jump
+  11    REM["---------------------------------"]     FN99;Comment
+  12    IF V301%=2 THEN 13 ELSE 15                   FN602;Condition
+  13    CALLP[2000]                                  FN80;Program call
+  14    REM["---------------------------------"]     FN99;Comment
+  15    IF V301%=3 THEN 16 ELSE 18                   FN602;Condition
+  16    CALLP[2000]                                  FN80;Program call
+  17    REM["---------------------------------"]     FN99;Comment
+  18    IF V301%=4 THEN 19 ELSE 21                   FN602;Condition
+  19    CALLP[2000]                                  FN80;Program call
+  20    REM["---------------------------------"]     FN99;Comment
+  21    IF V301%=5 THEN 22 ELSE 24                   FN602;Condition
+  22    CALLP[2000]                                  FN80;Program call
+  23    REM["---------------------------------"]     FN99;Comment
+  24    IF V301%=6 THEN 25 ELSE 27                   FN602;Condition
+  25    CALLP[2000]                                  FN80;Program call
+  26    REM["---------------------------------"]     FN99;Comment
+  27    IF V301%=7 THEN 28 ELSE 30                   FN602;Condition
+  28    CALLP[2000]                                  FN80;Program call
+  29    REM["---------------------------------"]     FN99;Comment
+  30    IF V301%=8 THEN 31 ELSE 33                   FN602;Condition
+  31    CALLP[2000]                                  FN80;Program call
+  32    REM["---------------------------------"]     FN99;Comment
+  33    IF V301%=9 THEN 34 ELSE 36                   FN602;Condition
+  34    CALLP[2000]                                  FN80;Program call
+  35    REM["---------------------------------"]     FN99;Comment
+  36    IF V301%=10 THEN 37 ELSE 39                  FN602;Condition
+  37    CALLP[2000]                                  FN80;Program call
+  38    REM["---------------------------------"]     FN99;Comment
+  39    IF V301%=11 THEN 40 ELSE 42                  FN602;Condition
+  40    CALLP[2000]                                  FN80;Program call
+  41    REM["---------------------------------"]     FN99;Comment
+  42    IF V301%=12 THEN 43 ELSE 45                  FN602;Condition
+  43    CALLP[2000]                                  FN80;Program call
+  44    REM["---------------------------------"]     FN99;Comment
+  45    IF V301%=13 THEN 46 ELSE 48                  FN602;Condition
+  46    CALLP[2000]                                  FN80;Program call
+  47    REM["---------------------------------"]     FN99;Comment
+  48    IF V301%=14 THEN 49 ELSE 51                  FN602;Condition
+  49    CALLP[2000]                                  FN80;Program call
+  50    REM["---------------------------------"]     FN99;Comment
+  51    IF V301%=15 THEN 52 ELSE 54                  FN602;Condition
+  52    CALLP[2000]                                  FN80;Program call
+  53    REM["---------------------------------"]     FN99;Comment
+  54    IF V301%=16 THEN 55 ELSE 57                  FN602;Condition
+  55    CALLP[2000]                                  FN80;Program call
+  56    REM["---------------------------------"]     FN99;Comment
+  57    IF V301%=17 THEN 58 ELSE 60                  FN602;Condition
+  58    CALLP[2000]                                  FN80;Program call
+  59    REM["---------------------------------"]     FN99;Comment
+  60    IF V301%=18 THEN 61 ELSE 63                  FN602;Condition
+  61    CALLP[2000]                                  FN80;Program call
+  62    REM["---------------------------------"]     FN99;Comment
+  63    GOTO[5]                                      FN90;Line jump
+  64    END                                          FN92;End
+Program List End

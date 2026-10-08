@@ -1,0 +1,126 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.602(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Program output"]                        FN99;Comment
+   2    INCLUDE["KEYSAMPLE"]                         FN697;Translate table included(file)
+   3    REM[""]                                      FN99;Comment
+   4    REM["Dummy pose file for Bug-Fix"]           FN99;Comment
+   5    USE[8765]                                    FN98;Select pose file
+   6    REM[""]                                      FN99;Comment
+   7    REM["Variable declaration, initialization."] FN99;Comment
+   8    V%[21] = 0                                   FN624;Substitution
+   9    V%[22] = 0                                   FN624;Substitution
+  10    V%[23] = 0                                   FN624;Substitution
+  11    V%[24] = 0                                   FN624;Substitution
+  12    V%[25] = 0                                   FN624;Substitution
+  13    V%[26] = 0                                   FN624;Substitution
+  14    V%[1] = 0                                    FN624;Substitution
+  15    REM[""]                                      FN99;Comment
+  16    REM["Opens the connection."]                 FN99;Comment
+  17    FORKMCR[600,10000]                           FN670;Fork User Task Program
+                  Program Name:This program is for setting up the robot vision system using
+  18    CallProc WaitForSendReady()                  FN806;Call User procedure
+  19    IF V%[1] <> 0 THEN *FINAL                    FN602;Condition
+  20    REM[""]                                      FN99;Comment
+  21    REM[""]                                      FN99;Comment
+  22    REM["Sends number of program."]              FN99;Comment
+  23    V$[1] = "PW,1,1"                             FN624;Substitution
+  24    CallProc ExecuteSend()                       FN806;Call User procedure
+  25    IF V%[1] <> 0 THEN *FINAL                    FN602;Condition
+  26    REM[""]                                      FN99;Comment
+  27    REM["Receives  number of program reply."]    FN99;Comment
+  28    CallProc ExecuteRecieve()                    FN806;Call User procedure
+  29    IF V%[1] <> 0 THEN *FINAL                    FN602;Condition
+  30    IF V$[11] <> "PW" THEN *FINAL                FN602;Condition
+  31    REM[""]                                      FN99;Comment
+  32    REM[""]                                      FN99;Comment
+  33    REM["Sends a trigger command."]              FN99;Comment
+  34    V$[1] = "T1"                                 FN624;Substitution
+  35    CallProc ExecuteSend()                       FN806;Call User procedure
+  36    IF V%[1] <> 0 THEN *FINAL                    FN602;Condition
+  37    REM[""]                                      FN99;Comment
+  38    REM["Receives a trigger command reply."]     FN99;Comment
+  39    CallProc ExecuteRecieve()                    FN806;Call User procedure
+  40    IF V%[1] <> 0 THEN *FINAL                    FN602;Condition
+  41    IF V$[11] <> "T1" THEN *FINAL                FN602;Condition
+  42    REM[""]                                      FN99;Comment
+  43    REM["Receives the values."]                  FN99;Comment
+  44    CallProc ExecuteRecieve()                    FN806;Call User procedure
+  45    IF V%[1] <> 0 THEN *FINAL                    FN602;Condition
+  46    REM[""]                                      FN99;Comment
+  47    REM["Moves to the specified position."]      FN99;Comment
+  48    V333% = VAL(V$[18])                          FN624;Substitution
+  49    V%[16] = VAL(V$[17])                         FN624;Substitution
+  50    REM[""]                                      FN99;Comment
+  51    IF V%[16] = 0 AND V301% = 1 AND V333% = 1 AND V%[15] = 8 FN676;IF Condition
+  52    V![11] = VAL(V$[11])                         FN624;Substitution
+  53    V![12] = VAL(V$[12])                         FN624;Substitution
+  54    V![13] = VAL(V$[13])                         FN624;Substitution
+  55    V![16] = VAL(V$[14])                         FN624;Substitution
+  56    V![15] = VAL(V$[15])                         FN624;Substitution
+  57    V![14] = VAL(V$[16])                         FN624;Substitution
+  58    CallProc ExecuteMove()                       FN806;Call User procedure
+  59    ENDIF                                        FN679;Condition end
+  60    REM[""]                                      FN99;Comment
+  61    *[FINAL]                                     FN601;Label
+  62    V%[25] = 1                                   FN624;Substitution
+  63    INH                                          FN310;Inhibit
+  64    IF V%[26] = 0 THEN *FINAL                    FN602;Condition
+  65    END                                          FN92;End
+  66    REM[""]                                      FN99;Comment
+  67    UsrProc ExecuteSend()                        FN802;User procedure
+  68    V%[24] = 0                                   FN624;Substitution
+  69    V%[23] = 1                                   FN624;Substitution
+  70    INH                                          FN310;Inhibit
+  71    CallProc WaitForSendReady()                  FN806;Call User procedure
+  72    EndProc                                      FN804;End User procedure
+  73    REM[""]                                      FN99;Comment
+  74    UsrProc ExecuteRecieve()                     FN802;User procedure
+  75    V%[21] = 0                                   FN624;Substitution
+  76    V%[22] = 1                                   FN624;Substitution
+  77    INH                                          FN310;Inhibit
+  78    CallProc WaitForRecieveReady()               FN806;Call User procedure
+  79    EndProc                                      FN804;End User procedure
+  80    REM[""]                                      FN99;Comment
+  81    UsrProc WaitForSendReady()                   FN802;User procedure
+  82    *[SEND_LOOP]                                 FN601;Label
+  83    IF V%[1] <> 0 THEN *SEND_END                 FN602;Condition
+  84    IF V%[24] = 0 THEN *SEND_LOOP                FN602;Condition
+  85    *[SEND_END]                                  FN601;Label
+  86    EndProc                                      FN804;End User procedure
+  87    REM[""]                                      FN99;Comment
+  88    UsrProc WaitForRecieveReady()                FN802;User procedure
+  89    *[RECV_LOOP]                                 FN601;Label
+  90    IF V%[1] <> 0 THEN *RECV_END                 FN602;Condition
+  91    IF V%[21] = 0 THEN *RECV_LOOP                FN602;Condition
+  92    *[RECV_END]                                  FN601;Label
+  93    EndProc                                      FN804;End User procedure
+  94    REM[""]                                      FN99;Comment
+  95    UsrProc ExecuteMove()                        FN802;User procedure
+  96    V![13] = VAL(V$[13])+V![100]                 FN624;Substitution
+  97    P8765 = (V![11],V![12],V![13],V![14],V![15],V![16]) FN625;Substitution
+  98    SETM[O1031,1]                                FN105;Output signal
+                  Signal Name :Vision lights off
+  99    250mm/s   LIN     A1 P T1  D3 S3                 V
+ 100    REM[""]                                      FN99;Comment
+ 101    V![13] = VAL(V$[13])                         FN624;Substitution
+ 102    P8765 = (V![11],V![12],V![13],V![14],V![15],V![16]) FN625;Substitution
+ 103    250mm/s   LIN     A1 P T1  D3 S3                 V
+ 104    REM[""]                                      FN99;Comment
+ 105    CALLP[31]                                    FN80;Program call
+                  Program Name:Gripper 1 Close
+ 106    REM[""]                                      FN99;Comment
+ 107    V![13] = VAL(V$[13])+V![100]                 FN624;Substitution
+ 108    P8765 = (V![11],V![12],V![13],V![14],V![15],V![16]) FN625;Substitution
+ 109    250mm/s   LIN     A1 P T1  D3 S3                 V
+ 110    300mm/s   LIN     A8   T1  D3 S3                 V
+ 111    300mm/s   LIN     A8   T1  D3 S3                 V
+ 112   20.0mm/s   LIN     A1 P T1  D3 S3                 V
+ 113    CALLP[30]                                    FN80;Program call
+                  Program Name:Gripper 1 Open
+ 114    300mm/s   LIN     A8   T1  D3 S3                 V
+ 115   75.0%      JOINT   A6   T1  D3 S3                 V
+ 116    REM[""]                                      FN99;Comment
+ 117    REM[""]                                      FN99;Comment
+ 118    EndProc                                      FN804;End User procedure
+Program List End

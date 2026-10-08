@@ -1,0 +1,70 @@
+1,Grip1 part present
+2,Grip2 part present
+3,Flip part present
+4,At home
+5,QC REQ Left
+6,QC REQ Left
+7,QC REQ Right
+8,QC REQ Right
+9,Blowoff
+10,Blowoff
+11,Camera Fault
+12,Camera Bad Part
+13,Grip1 opened
+14,Grip1 closed
+15,Grip2 opened
+16,Grip2 closed
+17,Flip to Pos 1
+18,Flip to Pos 2
+19,Flip Pos 1
+20,Flip Pos 2
+21,Flip gripper opened
+22,Flip Grip closed
+23,Toggle gripper1
+24,Open grip1
+25,Close grip1
+26,Toggle gripper2
+27,Open grip2
+28,Close grip2
+29,Toggle flip gripper
+30,Open flip grip
+31,Close flip grip
+32,Lock Comp
+33,UnLock Comp
+34,
+35,
+36,Outfeed Drop part present
+37,
+38,Vision lights
+39,Vision lights on
+40,Vision lights off
+41,Running in auto
+42,failure status
+43,Unlock door
+44,Conveyor reset
+45,Prog select MAIN
+46,Prog select VISION TEST
+47,Prog select VISION Setup
+48,Prog select HOME
+49,Set active integer
+50,Check select MAIN
+51,Check select VISION TEST
+52,Check select VISION SETUP
+53,Check select HOME
+54,Cycle start
+55,Strobe
+56,Hold
+57,Abort
+58,Motor On
+59,Alarm1
+60,Alarm2
+61,Alarm3
+62,Alarm4
+63,Alarm5
+64,Alarm6
+65,Alarm7
+66,Alarm8
+67,Alarm9
+68,Alarm10
+69,
+

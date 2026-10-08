@@ -1,0 +1,111 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.603(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Switch number of camera program"]       FN99;Comment
+   2    INCLUDE["KEYSAMPLE"]                         FN697;Translate table included(file)
+   3    USE[8765]                                    FN98;Select pose file
+   4    REM[""]                                      FN99;Comment
+   5    REM["Kill User Task."]                       FN99;Comment
+   6    KILLMCR[600,1,1]                             FN833;Kill User Task
+                  Program Name:This program is for setting up the robot vision system using
+   7    KILLMCR[500,1,1]                             FN833;Kill User Task
+                  Program Name:This program is for setting up the robot vision system using
+   8    REM[""]                                      FN99;Comment
+   9    REM["Variable declaration, initialization."] FN99;Comment
+  10    V%[21] = 0                                   FN624;Substitution
+  11    V%[22] = 0                                   FN624;Substitution
+  12    V%[23] = 0                                   FN624;Substitution
+  13    V%[24] = 0                                   FN624;Substitution
+  14    V%[25] = 0                                   FN624;Substitution
+  15    V%[26] = 0                                   FN624;Substitution
+  16    V%[1] = 0                                    FN624;Substitution
+  17    REM[""]                                      FN99;Comment
+  18    REM[""]                                      FN99;Comment
+  19    REM["Reset program number check"]            FN99;Comment
+  20    SETMD[O302,0,0,0]                            FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Test Bit
+  21    REM[""]                                      FN99;Comment
+  22    REM["Check Program Number."]                 FN99;Comment
+  23    REM[""]                                      FN99;Comment
+  24    REM["Opens the connection."]                 FN99;Comment
+  25    FORKMCR[600,10000]                           FN670;Fork User Task Program
+                  Program Name:This program is for setting up the robot vision system using
+  26    CallProc WaitForSendReady()                  FN806;Call User procedure
+  27    IF V%[1] <> 0 THEN *FINAL                    FN602;Condition
+  28    REM["------------------------------------------------"] FN99;Comment
+  29    REM[""]                                      FN99;Comment
+  30    REM["Switch camera to RUN mode"]             FN99;Comment
+  31    REM[""]                                      FN99;Comment
+  32    V$[1] = "R0"                                 FN624;Substitution
+  33    CallProc ExecuteSend()                       FN806;Call User procedure
+  34    IF V%[1] <> 0 THEN *FINAL                    FN602;Condition
+  35    REM[""]                                      FN99;Comment
+  36    REM["Receives  number of program reply."]    FN99;Comment
+  37    CallProc ExecuteRecieve()                    FN806;Call User procedure
+  38    IF V%[1] <> 0 THEN *FINAL                    FN602;Condition
+  39    IF V$[11] <> "R0" THEN *FINAL                FN602;Condition
+  40    REM["------------------------------------------------"] FN99;Comment
+  41    REM["Send program number ."]                 FN99;Comment
+  42    IF V301% = 0                                 FN676;IF Condition
+  43    SETMD[O302,1,0,0]                            FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Test Bit
+  44    GOTO[*FINAL]                                 FN90;Line jump
+  45    ENDIF                                        FN679;Condition end
+  46    REM[""]                                      FN99;Comment
+  47    REM[""]                                      FN99;Comment
+  48    V$[1] = "PW,1,"+STR$(V301%)                  FN624;Substitution
+  49    REM[""]                                      FN99;Comment
+  50    CallProc ExecuteSend()                       FN806;Call User procedure
+  51    IF V%[1] <> 0 THEN *FINAL                    FN602;Condition
+  52    REM[""]                                      FN99;Comment
+  53    REM["Receives  number of program reply."]    FN99;Comment
+  54    CallProc ExecuteRecieve()                    FN806;Call User procedure
+  55    IF V%[1] <> 0 THEN *FINAL                    FN602;Condition
+  56    IF V$[11] = "ER" AND V$[12] = "PW" OR V301% = 0 FN676;IF Condition
+  57    SETMD[O302,1,0,0]                            FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Test Bit
+  58    ENDIF                                        FN679;Condition end
+  59    REM[""]                                      FN99;Comment
+  60    IF V$[11] <> "PW" THEN *FINAL                FN602;Condition
+  61    REM[""]                                      FN99;Comment
+  62    REM["-----------------------------------------------"] FN99;Comment
+  63    *[FINAL]                                     FN601;Label
+  64    V%[25] = 1                                   FN624;Substitution
+  65    INH                                          FN310;Inhibit
+  66    IF V%[26] = 0 THEN *FINAL                    FN602;Condition
+  67    *[End]                                       FN601;Label
+  68    END                                          FN92;End
+  69    REM[""]                                      FN99;Comment
+  70    UsrProc ExecuteSend()                        FN802;User procedure
+  71    V%[24] = 0                                   FN624;Substitution
+  72    V%[23] = 1                                   FN624;Substitution
+  73    INH                                          FN310;Inhibit
+  74    CallProc WaitForSendReady()                  FN806;Call User procedure
+  75    EndProc                                      FN804;End User procedure
+  76    REM[""]                                      FN99;Comment
+  77    UsrProc ExecuteRecieve()                     FN802;User procedure
+  78    V%[21] = 0                                   FN624;Substitution
+  79    V%[22] = 1                                   FN624;Substitution
+  80    INH                                          FN310;Inhibit
+  81    CallProc WaitForRecieveReady()               FN806;Call User procedure
+  82    EndProc                                      FN804;End User procedure
+  83    REM[""]                                      FN99;Comment
+  84    UsrProc WaitForSendReady()                   FN802;User procedure
+  85    *[SEND_LOOP]                                 FN601;Label
+  86    IF V%[1] <> 0 THEN *SEND_END                 FN602;Condition
+  87    IF V%[24] = 0 THEN *SEND_LOOP                FN602;Condition
+  88    *[SEND_END]                                  FN601;Label
+  89    EndProc                                      FN804;End User procedure
+  90    REM[""]                                      FN99;Comment
+  91    REM[""]                                      FN99;Comment
+  92    UsrProc WaitForRecieveReady()                FN802;User procedure
+  93    *[RECV_LOOP]                                 FN601;Label
+  94    IF V%[1] <> 0 THEN *RECV_END                 FN602;Condition
+  95    IF V%[21] = 0 THEN *RECV_LOOP                FN602;Condition
+  96    *[RECV_END]                                  FN601;Label
+  97    EndProc                                      FN804;End User procedure
+  98    REM[""]                                      FN99;Comment
+  99    REM[""]                                      FN99;Comment
+ 100    REM[""]                                      FN99;Comment
+ 101    EndProc                                      FN804;End User procedure
+Program List End

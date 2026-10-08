@@ -1,0 +1,36 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.406(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Outfeed Gripper 1"]                     FN99;Comment
+   2    IF I0002=1 THEN 3 ELSE 23                    FN602;Condition
+   3    REM["Wait for outfeed clear"]                FN99;Comment
+   4    IF I1027=1 THEN 5 ELSE 7                     FN602;Condition
+   5    SETMD[O13,1,0,0.75]                          FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Outfeed Clear
+   6    JMP[3]                                       FN20;Step jump
+   7    SETMD[O13,1,0,2]                             FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Outfeed Clear
+   8    REM["----------------------------------"]    FN99;Comment
+   9    IF V301%=1 THEN 13 ELSE 23                   FN602;Condition
+  10    REM["----------------------------------"]    FN99;Comment
+  11    REM["Teach drop for Gripper 1 Left side"]    FN99;Comment
+  12    REM["----------------------------------"]    FN99;Comment
+  13   25.0%      JOINT   A1   T1     S1                 V
+                  'PRE APPROACH
+  14   20.0%      JOINT   A1   T1     S1                 V
+                  'APPROACH
+  15   15.0%      JOINT   A1   T1     S1                 V
+                  'DROP
+  16    CALLP[30]                                    FN80;Program call
+                  Program Name:Gripper 1 Open
+  17    DELAY[0.2]                                   FN50;Timer delay
+  18   1500mm/s   LIN     A1 P T1     S1                 V
+                  'CLEAR
+  19   35.0%      JOINT   A1 P T1     S1                 V
+                  'CLEAR CONVEYOR
+  20    REM["----------------------------------"]    FN99;Comment
+  21    SETMD[O13,1,0,1.5]                           FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Outfeed Clear
+  22    LETVI[V318%,0]                               FN75;Set integer variable
+  23    END                                          FN92;End
+Program List End

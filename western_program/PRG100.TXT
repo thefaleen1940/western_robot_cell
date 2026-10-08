@@ -1,0 +1,66 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.100(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Infeed Program G1"]                     FN99;Comment
+   2    REM["----------------------------------"]    FN99;Comment
+   3    SETM[O9,1]                                   FN105;Output signal
+                  Signal Name :Clear of conveyors
+   4    SETM[O1030,0]                                FN105;Output signal
+                  Signal Name :Vision lights on
+   5   50.0%      JOINT   A3   T1  D1                    V
+                  'At infeed conveyor
+   6    REM["-------------------------------------"] FN99;Comment
+   7    REM["Wait for infeed ready"]                 FN99;Comment
+   8    WAITI[I1025]                                 FN525;Wait Input cond
+                  Signal Name :InConv part present
+   9    REM["----------------------------------"]    FN99;Comment
+  10    SETM[O9,0]                                   FN105;Output signal
+                  Signal Name :Clear of conveyors
+  11    REM[""]                                      FN99;Comment
+  12    REM["Pick part"]                             FN99;Comment
+  13    REM["----------------------------------"]    FN99;Comment
+  14   50.0%      JOINT   A2   T1  D1                    V
+                  'Approach conveyor
+  15    CALLPI[30,I1018]                             FN81;Program call(I-condition)
+                  Program Name:Gripper 1 Open
+                  Signal Name :Gripper 1 closed
+  16    SETMD[O1030,1,0,1]                           FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Vision lights on
+  17    DELAY[0.5]                                   FN50;Timer delay
+  18    REM[""]                                      FN99;Comment
+  19    REM["Pick part"]                             FN99;Comment
+  20    REM["Select part on Vision PC"]              FN99;Comment
+  21    REM["Set V100 to approach/clear hight"]      FN99;Comment
+  22    REM["----------------------------------"]    FN99;Comment
+  23    LETVF[V100!,50]                              FN76;Set real variable
+  24    CALLP[601]                                   FN80;Program call
+                  Program Name:Vision Program Output 
+  25    REM[""]                                      FN99;Comment
+  26    REM["Program end"]                           FN99;Comment
+  27    REM["----------------------------------"]    FN99;Comment
+  28    *[End]                                       FN601;Label
+  29    SETMD[O1031,1,0,1]                           FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Vision lights off
+  30   50.0%      JOINT   A2   T1  D1                    V
+                  'Move back
+  31    SETM[O9,1]                                   FN105;Output signal
+                  Signal Name :Clear of conveyors
+  32    REM["I-0002 Gripper 1 Part Pres"]            FN99;Comment
+  33    IF I0002=1 THEN 43 ELSE 34                   FN602;Condition
+  34    IF I0045=1 THEN 35 ELSE 36                   FN602;Condition
+  35    LETVI[V310%,1]                               FN75;Set integer variable
+  36    IF V301%=1 THEN 37 ELSE 39                   FN602;Condition
+  37    LETVI[V301%,2]                               FN75;Set integer variable
+  38    JMP[41]                                      FN20;Step jump
+  39    IF V301%=2 THEN 40 ELSE 41                   FN602;Condition
+  40    LETVI[V301%,1]                               FN75;Set integer variable
+  41    JMP[4]                                       FN20;Step jump
+  42   50.0%      JOINT   A3   T1  D1                    V
+                  'At infeed conveyor
+  43    IF I0002=1 THEN 46 ELSE 44                   FN602;Condition
+  44   50.0%      JOINT   A3   T1  D1                    V
+                  'At infeed conveyor
+  45    CALLP[406]                                   FN80;Program call
+                  Program Name:Outfeed Gripper 1
+  46    END                                          FN92;End
+Program List End

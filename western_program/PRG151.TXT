@@ -1,0 +1,30 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.151(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Regrip Load"]                           FN99;Comment
+   2    500mm/s   LIN     A3   T1                        V
+   3    300mm/s   LIN     A2   T1                        V
+   4    SETMD[O93,1,0,1]                             FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Regrip gripper open
+   5    WAITI[I93]                                   FN525;Wait Input cond
+                  Signal Name :Regrip gripper open
+   6    300mm/s   LIN     A2   T1                        V
+   7    CALLP[43]                                    FN80;Program call
+                  Program Name:Regrip Gripper close
+   8    DELAY[0.5]                                   FN50;Timer delay
+   9    CALLP[20]                                    FN80;Program call
+                  Program Name:Gripper 2 Open
+  10    DELAY[0.5]                                   FN50;Timer delay
+  11    300mm/s   LIN     A2   T1                        V
+  12    300mm/s   LIN     A2   T1                        V
+  13    REM["Regrip1 Unload"]                        FN99;Comment
+  14    300mm/s   LIN     A2   T1                        V
+  15    300mm/s   LIN     A2   T1                        V
+  16    CALLP[31]                                    FN80;Program call
+                  Program Name:Gripper 1 Close
+  17    CALLP[42]                                    FN80;Program call
+                  Program Name:Regrip gripper open
+  18    300mm/s   LIN     A2   T1                        V
+  19    300mm/s   LIN     A2   T1                        V
+  20    END                                          FN92;End
+Program List End

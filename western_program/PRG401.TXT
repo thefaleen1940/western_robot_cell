@@ -1,0 +1,12 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.401(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Outfeed Clear"]                         FN99;Comment
+   2    REM["----------------------------------"]    FN99;Comment
+   3   75.0%      JOINT   A2   T1  D1                    V
+                  'At outfeed
+   4    DELAY[1]                                     FN50;Timer delay
+   5    SETM[O9,1]                                   FN105;Output signal
+                  Signal Name :Clear of conveyors
+   6    END                                          FN92;End
+Program List End

@@ -1,0 +1,14 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.300(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Right MC Enter"]                        FN99;Comment
+   2   80.0%      JOINT   A5   T1                        V
+   3    CALLP[302]                                   FN80;Program call
+                  Program Name:Right MC Wait for ready
+   4    SETM[O1013,1]                                FN105;Output signal
+                  Signal Name :Right MC Robot In MC
+   5   80.0%      JOINT   A3   T1                        V
+   6   40.0%      JOINT   A3   T1                        V
+   7   50.0%      JOINT   A3   T1                        V
+   8    END                                          FN92;End
+Program List End

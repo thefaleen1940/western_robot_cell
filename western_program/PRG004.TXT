@@ -1,0 +1,18 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.004(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Tool Change Position"]                  FN99;Comment
+   2    SETOVR[10]                                   FN317;Set Override
+   3   25.0%      JOINT   A1   T1                        V
+   4   25.0%      JOINT   A1   T1                        V
+   5   25.0%      JOINT   A1   T1                        V
+   6   25.0%      JOINT   A1   T1                        V
+   7    DELAY[2]                                     FN50;Timer delay
+   8    STOP                                         FN41;Robot stop
+   9    REM["From Tool Change Position"]             FN99;Comment
+  10   25.0%      JOINT   A1   T1                        V
+  11   25.0%      JOINT   A1   T1                        V
+  12   25.0%      JOINT   A1   T1                        V
+  13   25.0%      JOINT   A1   T1                        V
+  14    END                                          FN92;End
+Program List End

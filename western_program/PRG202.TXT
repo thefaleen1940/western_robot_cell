@@ -1,0 +1,9 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.202(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Left MC Wait for Ready"]                FN99;Comment
+   2    REM["----------------------------------"]    FN99;Comment
+   3    WAITI[I1002]                                 FN525;Wait Input cond
+                  Signal Name :Left MC Ready To Load
+   4    END                                          FN92;End
+Program List End

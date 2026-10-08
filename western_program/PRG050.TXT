@@ -1,0 +1,63 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.050(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Flip Station Left MC Part 1"]           FN99;Comment
+   2    REM["----------------------------------"]    FN99;Comment
+   3   50.0%      JOINT   A6   T1  D1                    V
+                  'At station
+   4   35.0%      JOINT   A6   T1  D1                    V
+                  'Approach
+   5    REM[""]                                      FN99;Comment
+   6    REM["Get station ready"]                     FN99;Comment
+   7    REM["----------------------------------"]    FN99;Comment
+   8    CALLP[44]                                    FN80;Program call
+                  Program Name:Regrip Position 1
+   9    CALLP[42]                                    FN80;Program call
+                  Program Name:Regrip gripper open
+  10    DELAY[0.2]                                   FN50;Timer delay
+  11    REM[""]                                      FN99;Comment
+  12    REM["Load part"]                             FN99;Comment
+  13    REM["----------------------------------"]    FN99;Comment
+  14   30.0%      JOINT   A1   T1     S1                 V
+                  'APPROACH
+  15    250mm/s   LIN     A1 P T1     S1                 V
+                  'Load
+  16    CALLP[43]                                    FN80;Program call
+                  Program Name:Regrip Gripper close
+  17    DELAY[0.1]                                   FN50;Timer delay
+  18    CALLP[20]                                    FN80;Program call
+                  Program Name:Gripper 2 Open
+  19    DELAY[0.1]                                   FN50;Timer delay
+  20    500mm/s   LIN     A1   T1     S1                 V
+                  'Clear
+  21    500mm/s   LIN     A2   T1                        V
+                  'CLEAR FIXTURE
+  22    REM[""]                                      FN99;Comment
+  23    REM["Pick part"]                             FN99;Comment
+  24    REM["----------------------------------"]    FN99;Comment
+  25    CALLP[30]                                    FN80;Program call
+                  Program Name:Gripper 1 Open
+  26    300mm/s   LIN     A2   T1  D1                    V
+                  'APPROACH
+  27    250mm/s   LIN     A1 P T1  D1                    V
+                  'Pick
+  28    100mm/s   LIN     A1 P T1  D1                    V
+                  'Pick
+  29    DELAY[0.2]                                   FN50;Timer delay
+  30    CALLP[31]                                    FN80;Program call
+                  Program Name:Gripper 1 Close
+  31    DELAY[0.1]                                   FN50;Timer delay
+  32    CALLP[42]                                    FN80;Program call
+                  Program Name:Regrip gripper open
+  33    DELAY[0.1]                                   FN50;Timer delay
+  34    500mm/s   LIN     A1   T1  D1                    V
+                  'Clear
+  35    REM[""]                                      FN99;Comment
+  36    REM["Program end"]                           FN99;Comment
+  37    REM["----------------------------------"]    FN99;Comment
+  38   50.0%      JOINT   A3   T1                        V
+                  'HOME
+  39    SETMD[O91,1,0,1]                             FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Flip position 1
+  40    END                                          FN92;End
+Program List End

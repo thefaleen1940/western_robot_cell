@@ -1,0 +1,13 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.001(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Main program"]                          FN99;Comment
+   2    REM["---------------------------------"]     FN99;Comment
+   3    REM["Main Program"]                          FN99;Comment
+   4    IF V301%=1 THEN 5 ELSE 6                     FN602;Condition
+   5    CALLP[9]                                     FN80;Program call
+                  Program Name:Main Operation, 2 Machines, 2 Grips
+   6    REM["---------------------------------"]     FN99;Comment
+   7    STOP                                         FN41;Robot stop
+   8    END                                          FN92;End
+Program List End

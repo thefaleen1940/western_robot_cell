@@ -1,0 +1,24 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.325(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Right MC Load Part 1 OP 20"]            FN99;Comment
+   2    REM["---------------------------------"]     FN99;Comment
+   3    CALLP[312]                                   FN80;Program call
+                  Program Name:Right MC Unlamp OP 20
+   4    500mm/s   LIN     A4   T1                        V
+   5    250mm/s   LIN     A3   T1                        V
+   6    250mm/s   LIN     A2   T1                        V
+   7    100mm/s   LIN     A1 P T1                        V
+                  'DROP
+   8   50.0mm/s   LIN     A1 P T1                        V
+                  'DROP
+   9    CALLP[30]                                    FN80;Program call
+                  Program Name:Gripper 1 Open
+  10    CALLP[311]                                   FN80;Program call
+                  Program Name:Right MC Clamp OP 20
+  11    DELAY[0.1]                                   FN50;Timer delay
+  12    200mm/s   LIN     A1   T1                        V
+                  'CLEAR FIXTURE
+  13    500mm/s   LIN     A5   T1                        V
+  14    END                                          FN92;End
+Program List End

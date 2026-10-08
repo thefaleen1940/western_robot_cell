@@ -1,0 +1,30 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.471(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["QC Drop Right MC"]                      FN99;Comment
+   2    REM["----------------------------------"]    FN99;Comment
+   3   25.0%      JOINT   A3   T1     S1                 V
+                  'Approach
+   4   25.0%      JOINT   A3   T1     S1                 V
+                  'Approach
+   5    250mm/s   LIN     A1 P T1     S1                 V
+                  'Load
+   6    250mm/s   LIN     A1 P T1     S1                 V
+                  'Load
+   7    200mm/s   LIN     A1 P T1     S1                 V
+                  'Load
+   8    CALLP[20]                                    FN80;Program call
+                  Program Name:Gripper 2 Open
+   9    LETVI[V305%,0]                               FN75;Set integer variable
+  10    250mm/s   LIN     A1   T1     S1                 V
+                  'Load
+  11    SETMD[O1048,1,0,1]                           FN35;Output sig(ON/OFF/delay/pulse)
+  12    500mm/s   LIN     A3   T1     S1                 V
+                  'Clear
+  13   25.0%      JOINT   A3   T1     S1                 V
+                  'Approach
+  14   25.0%      JOINT   A3   T1     S1                 V
+                  'Approach
+  15    REM["----------------------------------"]    FN99;Comment
+  16    END                                          FN92;End
+Program List End

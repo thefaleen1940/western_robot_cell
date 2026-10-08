@@ -1,0 +1,17 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.203(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Left MC Blowoff"]                       FN99;Comment
+   2    REM["Air On"]                                FN99;Comment
+   3    750mm/s   LIN     A6   T1                        V
+   4    SETM[O1037,1]                                FN105;Output signal
+                  Signal Name :Blowoff
+   5    150mm/s   LIN     A3   T1                        V
+   6    150mm/s   LIN     A3   T1                        V
+   7    150mm/s   LIN     A3   T1     S2                 V
+   8    SETM[O1037,0]                                FN105;Output signal
+                  Signal Name :Blowoff
+   9    750mm/s   LIN     A6   T1                        V
+  10    REM["Air Off"]                               FN99;Comment
+  11    END                                          FN92;End
+Program List End

@@ -1,0 +1,50 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.110(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Left MC Service Part 1 "]               FN99;Comment
+   2    REM["-------------------------"]             FN99;Comment
+   3    REM["I-0002 Gripper 1 Part Pres"]            FN99;Comment
+   4    IF I0002=1 THEN 5 ELSE 29                    FN602;Condition
+   5    CALLP[202]                                   FN80;Program call
+                  Program Name:Left MC Wait for Ready
+   6    CALLP[200]                                   FN80;Program call
+                  Program Name:Left MC Enter
+   7    CALLP[203]                                   FN80;Program call
+                  Program Name:Left MC Blowoff
+   8    CALLP[231]                                   FN80;Program call
+                  Program Name:Left MC Unload Part 1 OP 10
+   9    CALLP[204]                                   FN80;Program call
+                  Program Name:Left MC Blowoff OP 10
+  10    CALLP[221]                                   FN80;Program call
+                  Program Name:Left MC Load Part 1 OP 10
+  11    CALLP[201]                                   FN80;Program call
+                  Program Name:Left MC Exit
+  12    REM["-------------------------"]             FN99;Comment
+  13    IF I0003=1 THEN 14 ELSE 23                   FN602;Condition
+  14    CALLP[50]                                    FN80;Program call
+                  Program Name:Flip Station Left MC Part 1
+  15    REM["-------------------------"]             FN99;Comment
+  16    CALLP[202]                                   FN80;Program call
+                  Program Name:Left MC Wait for Ready
+  17    CALLP[200]                                   FN80;Program call
+                  Program Name:Left MC Enter
+  18    CALLP[235]                                   FN80;Program call
+                  Program Name:Left MC Unload Part 1 OP 20
+  19    CALLP[206]                                   FN80;Program call
+                  Program Name:Left MC Blowoff OP 20
+  20    CALLP[225]                                   FN80;Program call
+                  Program Name:Left MC Load Part 1 OP 20
+  21    CALLP[201]                                   FN80;Program call
+                  Program Name:Left MC Exit
+  22    REM["-------------------------"]             FN99;Comment
+  23    SETM[O1005,0]                                FN105;Output signal
+                  Signal Name :Left MC Robot In MC
+  24    CALLP[205]                                   FN80;Program call
+                  Program Name:Left MC start
+  25    REM["-------------------------"]             FN99;Comment
+  26    IF I0003=1 THEN 27 ELSE 28                   FN602;Condition
+  27    CALLP[410]                                   FN80;Program call
+                  Program Name:Outfeed Left MC Part 1
+  28    REM["-------------------------"]             FN99;Comment
+  29    END                                          FN92;End
+Program List End

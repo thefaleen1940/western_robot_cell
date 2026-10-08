@@ -1,0 +1,669 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.500(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Set Up Keyence vision system "]         FN99;Comment
+   2    REM["Keyence's vision sensor."]              FN99;Comment
+   3    INCLUDE["KEYSETUP"]                          FN697;Translate table included(file)
+   4    DIM posCurrent As POSITION                   FN801;Any variable
+   5    REM["Dummy pose file for Bug-Fix"]           FN99;Comment
+   6    USE[8765]                                    FN98;Select pose file
+   7    REM["Version"]                               FN99;Comment
+   8    V%[61] = 1090000                             FN624;Substitution
+   9    REM["Discrimination ID"]                     FN99;Comment
+  10    V%[62] = 130                                 FN624;Substitution
+  11    REM["Acceralation and speed"]                FN99;Comment
+  12    V%[71] = 100                                 FN624;Substitution
+  13    V%[72] = 10                                  FN624;Substitution
+  14    REM["Coordinate system"]                     FN99;Comment
+  15    V%[73] = 0                                   FN624;Substitution
+  16    V%[74] = 1                                   FN624;Substitution
+  17    REM["Variable declaration, initialization."] FN99;Comment
+  18    V%[21] = 0                                   FN624;Substitution
+  19    V%[22] = 0                                   FN624;Substitution
+  20    V%[23] = 0                                   FN624;Substitution
+  21    V%[24] = 0                                   FN624;Substitution
+  22    V%[25] = 0                                   FN624;Substitution
+  23    V%[26] = 0                                   FN624;Substitution
+  24    V%[1] = 0                                    FN624;Substitution
+  25    V%[15] = 1                                   FN624;Substitution
+  26    REM["Opens the connection."]                 FN99;Comment
+  27    FORKMCR[500,10000]                           FN670;Fork User Task Program
+                  Program Name:This program is for setting up the robot vision system using
+  28    DELAY[1]                                     FN50;Timer delay
+  29    CallProc WaitForSendReady()                  FN806;Call User procedure
+  30    IF V%[1] <> 0 THEN *FINAL                    FN602;Condition
+  31    *[COMMAND_LOOP]                              FN601;Label
+  32    REM["Receive a command"]                     FN99;Comment
+  33    CallProc ExecuteRecieve()                    FN806;Call User procedure
+  34    IF V%[1] <> 0 THEN *FINAL                    FN602;Condition
+  35    REM["Set coordinate system for the first time"] FN99;Comment
+  36    IF V%[15] <> 0                               FN676;IF Condition
+  37    V%[15] = 0                                   FN624;Substitution
+  38    NRLCRD[V%[73]]                               FN171;Change coord. for R-Lang.
+  39    CallProc ChangeToolNum()                     FN806;Call User procedure
+  40    ENDIF                                        FN679;Condition end
+  41    REM["Handle a command from vision system"]   FN99;Comment
+  42    CallProc SpritToString()                     FN806;Call User procedure
+  43    CallProc HandleCommand()                     FN806;Call User procedure
+  44    REM["Send a reply"]                          FN99;Comment
+  45    CallProc MakeReply()                         FN806;Call User procedure
+  46    CallProc ExecuteSend()                       FN806;Call User procedure
+  47    IF V%[1] <> 0 THEN *FINAL                    FN602;Condition
+  48    GOTO[*COMMAND_LOOP]                          FN90;Line jump
+  49    *[FINAL]                                     FN601;Label
+  50    V%[25] = 1                                   FN624;Substitution
+  51    INH                                          FN310;Inhibit
+  52    IF V%[26] = 0 THEN *FINAL                    FN602;Condition
+  53    END                                          FN92;End
+  54    UsrProc ExecuteSend()                        FN802;User procedure
+  55    V%[24] = 0                                   FN624;Substitution
+  56    V%[23] = 1                                   FN624;Substitution
+  57    INH                                          FN310;Inhibit
+  58    CallProc WaitForSendReady()                  FN806;Call User procedure
+  59    EndProc                                      FN804;End User procedure
+  60    UsrProc ExecuteRecieve()                     FN802;User procedure
+  61    V%[21] = 0                                   FN624;Substitution
+  62    V%[22] = 1                                   FN624;Substitution
+  63    INH                                          FN310;Inhibit
+  64    CallProc WaitForRecieveReady()               FN806;Call User procedure
+  65    EndProc                                      FN804;End User procedure
+  66    UsrProc WaitForSendReady()                   FN802;User procedure
+  67    *[SEND_LOOP]                                 FN601;Label
+  68    IF V%[1] <> 0 THEN *SEND_END                 FN602;Condition
+  69    IF V%[24] = 0 THEN *SEND_LOOP                FN602;Condition
+  70    *[SEND_END]                                  FN601;Label
+  71    EndProc                                      FN804;End User procedure
+  72    UsrProc WaitForRecieveReady()                FN802;User procedure
+  73    *[RECV_LOOP]                                 FN601;Label
+  74    IF V%[1] <> 0 THEN *RECV_END                 FN602;Condition
+  75    IF V%[21] = 0 THEN *RECV_LOOP                FN602;Condition
+  76    *[RECV_END]                                  FN601;Label
+  77    EndProc                                      FN804;End User procedure
+  78    UsrProc MakeReply()                          FN802;User procedure
+  79    V$[4] = V$[3]                                FN624;Substitution
+  80    V%[16] = LEN(V$[4])                          FN624;Substitution
+  81    EndProc                                      FN804;End User procedure
+  82    UsrProc HandleCommand()                      FN802;User procedure
+  83    V$[3] = ""                                   FN624;Substitution
+  84    V%[81] = 1                                   FN624;Substitution
+  85    V%[37] = 0                                   FN624;Substitution
+  86    V$[1] = V$[1+10]                             FN624;Substitution
+  87    IF V$[1] = "NRBT"                            FN676;IF Condition
+  88    V%[32] = VAL(V$[2+10])                       FN624;Substitution
+  89    V%[33] = VAL(V$[3+10])                       FN624;Substitution
+  90    SWITCH V%[32]                                FN686;SWITCH
+  91    CASE 1                                       FN687;Condition
+  92    REM["Echo reply"]                            FN99;Comment
+  93    V%[41] = VAL(V$[4+10])                       FN624;Substitution
+  94    V%[42] = VAL(V$[5+10])                       FN624;Substitution
+  95    V%[34] = VAL(V$[6+10])                       FN624;Substitution
+  96    CallProc ProcEcho()                          FN806;Call User procedure
+  97    BREAK                                        FN688;BREAK
+  98    CASE 2                                       FN687;Condition
+  99    REM["Get parameters"]                        FN99;Comment
+ 100    V%[34] = VAL(V$[4+10])                       FN624;Substitution
+ 101    CallProc ProcGetParam()                      FN806;Call User procedure
+ 102    BREAK                                        FN688;BREAK
+ 103    CASE 3                                       FN687;Condition
+ 104    REM["Set parameters"]                        FN99;Comment
+ 105    V%[41] = VAL(V$[4+10])                       FN624;Substitution
+ 106    V%[42] = VAL(V$[5+10])                       FN624;Substitution
+ 107    V%[43] = VAL(V$[6+10])                       FN624;Substitution
+ 108    V%[44] = VAL(V$[7+10])                       FN624;Substitution
+ 109    V%[45] = VAL(V$[8+10])                       FN624;Substitution
+ 110    V%[34] = VAL(V$[9+10])                       FN624;Substitution
+ 111    CallProc ProcSetParam()                      FN806;Call User procedure
+ 112    BREAK                                        FN688;BREAK
+ 113    CASE 4                                       FN687;Condition
+ 114    REM["Get current position"]                  FN99;Comment
+ 115    V%[34] = VAL(V$[4+10])                       FN624;Substitution
+ 116    CallProc ProcGetPos()                        FN806;Call User procedure
+ 117    BREAK                                        FN688;BREAK
+ 118    CASE 5                                       FN687;Condition
+ 119    REM["Move relatively"]                       FN99;Comment
+ 120    V%[41] = VAL(V$[4+10])                       FN624;Substitution
+ 121    V%[42] = VAL(V$[5+10])                       FN624;Substitution
+ 122    V%[43] = VAL(V$[6+10])                       FN624;Substitution
+ 123    V%[44] = VAL(V$[7+10])                       FN624;Substitution
+ 124    V%[45] = VAL(V$[8+10])                       FN624;Substitution
+ 125    V%[46] = VAL(V$[9+10])                       FN624;Substitution
+ 126    V%[47] = VAL(V$[10+10])                      FN624;Substitution
+ 127    V%[48] = VAL(V$[11+10])                      FN624;Substitution
+ 128    V%[34] = VAL(V$[12+10])                      FN624;Substitution
+ 129    CallProc ProcMoveRel()                       FN806;Call User procedure
+ 130    BREAK                                        FN688;BREAK
+ 131    CASE 6                                       FN687;Condition
+ 132    REM["Move absolutely"]                       FN99;Comment
+ 133    V%[41] = VAL(V$[4+10])                       FN624;Substitution
+ 134    V%[42] = VAL(V$[5+10])                       FN624;Substitution
+ 135    V%[43] = VAL(V$[6+10])                       FN624;Substitution
+ 136    V%[44] = VAL(V$[7+10])                       FN624;Substitution
+ 137    V%[45] = VAL(V$[8+10])                       FN624;Substitution
+ 138    V%[46] = VAL(V$[9+10])                       FN624;Substitution
+ 139    V%[34] = VAL(V$[10+10])                      FN624;Substitution
+ 140    CallProc ProcMoveAbs()                       FN806;Call User procedure
+ 141    BREAK                                        FN688;BREAK
+ 142    CASE 7                                       FN687;Condition
+ 143    REM["Get version"]                           FN99;Comment
+ 144    V%[34] = VAL(V$[4+10])                       FN624;Substitution
+ 145    CallProc ProcGetVer()                        FN806;Call User procedure
+ 146    BREAK                                        FN688;BREAK
+ 147    ENDS                                         FN689;SWITCH end
+ 148    ENDIF                                        FN679;Condition end
+ 149    EndProc                                      FN804;End User procedure
+ 150    REM["Echo reply"]                            FN99;Comment
+ 151    UsrProc ProcEcho()                           FN802;User procedure
+ 152    REM["Result"]                                FN99;Comment
+ 153    V%[35] = V%[32]+V%[33]+V%[41]+V%[42]         FN624;Substitution
+ 154    V%[38] = 2                                   FN624;Substitution
+ 155    IF V%[34] <> V%[35] THEN *FAILED1            FN602;Condition
+ 156    REM["Process"]                               FN99;Comment
+ 157    V%[51] = V%[41]                              FN624;Substitution
+ 158    V%[52] = V%[42]                              FN624;Substitution
+ 159    REM["Conversion"]                            FN99;Comment
+ 160    V%[36] = V%[51]+V%[52]                       FN624;Substitution
+ 161    V%[36] = V%[36]+V%[32]+V%[33]+V%[37]         FN624;Substitution
+ 162    CallProc PrintStringCRBTComma()              FN806;Call User procedure
+ 163    CallProc PrintInteger(V%[32])                FN806;Call User procedure
+ 164    CallProc PrintStringComma()                  FN806;Call User procedure
+ 165    CallProc PrintInteger(V%[33])                FN806;Call User procedure
+ 166    CallProc PrintStringComma()                  FN806;Call User procedure
+ 167    CallProc PrintInteger(V%[37])                FN806;Call User procedure
+ 168    CallProc PrintStringComma()                  FN806;Call User procedure
+ 169    CallProc PrintInteger(V%[51])                FN806;Call User procedure
+ 170    CallProc PrintStringComma()                  FN806;Call User procedure
+ 171    CallProc PrintInteger(V%[52])                FN806;Call User procedure
+ 172    CallProc PrintStringComma()                  FN806;Call User procedure
+ 173    CallProc PrintInteger(V%[36])                FN806;Call User procedure
+ 174    GOTO[*RET1]                                  FN90;Line jump
+ 175    *[FAILED1]                                   FN601;Label
+ 176    V%[37] = 1                                   FN624;Substitution
+ 177    CallProc OutputError()                       FN806;Call User procedure
+ 178    *[RET1]                                      FN601;Label
+ 179    EndProc                                      FN804;End User procedure
+ 180    REM["Get parameters"]                        FN99;Comment
+ 181    UsrProc ProcGetParam()                       FN802;User procedure
+ 182    REM["Result"]                                FN99;Comment
+ 183    V%[35] = V%[32]+V%[33]                       FN624;Substitution
+ 184    V%[38] = 5                                   FN624;Substitution
+ 185    IF V%[34] <> V%[35] THEN *FAILED2            FN602;Condition
+ 186    REM["Process"]                               FN99;Comment
+ 187    V%[51] = 0                                   FN624;Substitution
+ 188    V%[52] = V%[73]                              FN624;Substitution
+ 189    V%[53] = V%[74]                              FN624;Substitution
+ 190    V%[54] = V%[72]                              FN624;Substitution
+ 191    V%[55] = V%[71]                              FN624;Substitution
+ 192    REM["Conversion"]                            FN99;Comment
+ 193    V%[36] = V%[51]+V%[52]+V%[53]+V%[54]+V%[55]  FN624;Substitution
+ 194    V%[36] = V%[36]+V%[32]+V%[33]+V%[37]         FN624;Substitution
+ 195    CallProc PrintStringCRBTComma()              FN806;Call User procedure
+ 196    CallProc PrintInteger(V%[32])                FN806;Call User procedure
+ 197    CallProc PrintStringComma()                  FN806;Call User procedure
+ 198    CallProc PrintInteger(V%[33])                FN806;Call User procedure
+ 199    CallProc PrintStringComma()                  FN806;Call User procedure
+ 200    CallProc PrintInteger(V%[37])                FN806;Call User procedure
+ 201    CallProc PrintStringComma()                  FN806;Call User procedure
+ 202    CallProc PrintInteger(V%[51])                FN806;Call User procedure
+ 203    CallProc PrintStringComma()                  FN806;Call User procedure
+ 204    CallProc PrintInteger(V%[52])                FN806;Call User procedure
+ 205    CallProc PrintStringComma()                  FN806;Call User procedure
+ 206    CallProc PrintInteger(V%[53])                FN806;Call User procedure
+ 207    CallProc PrintStringComma()                  FN806;Call User procedure
+ 208    CallProc PrintInteger(V%[54])                FN806;Call User procedure
+ 209    CallProc PrintStringComma()                  FN806;Call User procedure
+ 210    CallProc PrintInteger(V%[55])                FN806;Call User procedure
+ 211    CallProc PrintStringComma()                  FN806;Call User procedure
+ 212    CallProc PrintInteger(V%[36])                FN806;Call User procedure
+ 213    GOTO[*RET2]                                  FN90;Line jump
+ 214    *[FAILED2]                                   FN601;Label
+ 215    V%[37] = 1                                   FN624;Substitution
+ 216    CallProc OutputError()                       FN806;Call User procedure
+ 217    *[RET2]                                      FN601;Label
+ 218    EndProc                                      FN804;End User procedure
+ 219    REM["Set parameters"]                        FN99;Comment
+ 220    UsrProc ProcSetParam()                       FN802;User procedure
+ 221    REM["Result"]                                FN99;Comment
+ 222    V%[35] = V%[32]+V%[33]+V%[41]+V%[42]+V%[43]+V%[44]+V%[45] FN624;Substitution
+ 223    V%[38] = 5                                   FN624;Substitution
+ 224    IF V%[34] <> V%[35] THEN *FAILED3            FN602;Condition
+ 225    REM["Process"]                               FN99;Comment
+ 226    V%[73] = V%[42]                              FN624;Substitution
+ 227    NRLCRD[V%[73]]                               FN171;Change coord. for R-Lang.
+ 228    IF V%[43] = 0                                FN676;IF Condition
+ 229    V%[37] = 2                                   FN624;Substitution
+ 230    ELSE                                         FN678;ELSE
+ 231    V%[74] = V%[43]                              FN624;Substitution
+ 232    CallProc ChangeToolNum()                     FN806;Call User procedure
+ 233    ENDIF                                        FN679;Condition end
+ 234    V%[72] = V%[44]                              FN624;Substitution
+ 235    V%[71] = V%[45]                              FN624;Substitution
+ 236    V%[51] = 0                                   FN624;Substitution
+ 237    V%[52] = V%[73]                              FN624;Substitution
+ 238    V%[53] = V%[74]                              FN624;Substitution
+ 239    V%[54] = V%[72]                              FN624;Substitution
+ 240    V%[55] = V%[71]                              FN624;Substitution
+ 241    REM["Conversion"]                            FN99;Comment
+ 242    V%[36] = V%[51]+V%[52]+V%[53]+V%[54]+V%[55]  FN624;Substitution
+ 243    V%[36] = V%[36]+V%[32]+V%[33]+V%[37]         FN624;Substitution
+ 244    CallProc PrintStringCRBTComma()              FN806;Call User procedure
+ 245    CallProc PrintInteger(V%[32])                FN806;Call User procedure
+ 246    CallProc PrintStringComma()                  FN806;Call User procedure
+ 247    CallProc PrintInteger(V%[33])                FN806;Call User procedure
+ 248    CallProc PrintStringComma()                  FN806;Call User procedure
+ 249    CallProc PrintInteger(V%[37])                FN806;Call User procedure
+ 250    CallProc PrintStringComma()                  FN806;Call User procedure
+ 251    CallProc PrintInteger(V%[51])                FN806;Call User procedure
+ 252    CallProc PrintStringComma()                  FN806;Call User procedure
+ 253    CallProc PrintInteger(V%[52])                FN806;Call User procedure
+ 254    CallProc PrintStringComma()                  FN806;Call User procedure
+ 255    CallProc PrintInteger(V%[53])                FN806;Call User procedure
+ 256    CallProc PrintStringComma()                  FN806;Call User procedure
+ 257    CallProc PrintInteger(V%[54])                FN806;Call User procedure
+ 258    CallProc PrintStringComma()                  FN806;Call User procedure
+ 259    CallProc PrintInteger(V%[55])                FN806;Call User procedure
+ 260    CallProc PrintStringComma()                  FN806;Call User procedure
+ 261    CallProc PrintInteger(V%[36])                FN806;Call User procedure
+ 262    GOTO[*RET3]                                  FN90;Line jump
+ 263    *[FAILED3]                                   FN601;Label
+ 264    V%[37] = 1                                   FN624;Substitution
+ 265    CallProc OutputError()                       FN806;Call User procedure
+ 266    *[RET3]                                      FN601;Label
+ 267    EndProc                                      FN804;End User procedure
+ 268    REM["Get current position"]                  FN99;Comment
+ 269    UsrProc ProcGetPos()                         FN802;User procedure
+ 270    REM["Result"]                                FN99;Comment
+ 271    V%[35] = V%[32]+V%[33]                       FN624;Substitution
+ 272    V%[38] = 6                                   FN624;Substitution
+ 273    IF V%[34] <> V%[35] THEN *FAILED4            FN602;Condition
+ 274    REM["Process"]                               FN99;Comment
+ 275    CallProc SetCurrentPosition()                FN806;Call User procedure
+ 276    REM["Conversion"]                            FN99;Comment
+ 277    V%[36] = V%[51]+V%[52]+V%[53]+V%[54]+V%[55]+V%[56] FN624;Substitution
+ 278    V%[36] = V%[36]+V%[32]+V%[33]+V%[37]         FN624;Substitution
+ 279    CallProc PrintStringCRBTComma()              FN806;Call User procedure
+ 280    CallProc PrintInteger(V%[32])                FN806;Call User procedure
+ 281    CallProc PrintStringComma()                  FN806;Call User procedure
+ 282    CallProc PrintInteger(V%[33])                FN806;Call User procedure
+ 283    CallProc PrintStringComma()                  FN806;Call User procedure
+ 284    CallProc PrintInteger(V%[37])                FN806;Call User procedure
+ 285    CallProc PrintStringComma()                  FN806;Call User procedure
+ 286    CallProc PrintInteger(V%[51])                FN806;Call User procedure
+ 287    CallProc PrintStringComma()                  FN806;Call User procedure
+ 288    CallProc PrintInteger(V%[52])                FN806;Call User procedure
+ 289    CallProc PrintStringComma()                  FN806;Call User procedure
+ 290    CallProc PrintInteger(V%[53])                FN806;Call User procedure
+ 291    CallProc PrintStringComma()                  FN806;Call User procedure
+ 292    CallProc PrintInteger(V%[54])                FN806;Call User procedure
+ 293    CallProc PrintStringComma()                  FN806;Call User procedure
+ 294    CallProc PrintInteger(V%[55])                FN806;Call User procedure
+ 295    CallProc PrintStringComma()                  FN806;Call User procedure
+ 296    CallProc PrintInteger(V%[56])                FN806;Call User procedure
+ 297    CallProc PrintStringComma()                  FN806;Call User procedure
+ 298    CallProc PrintInteger(V%[36])                FN806;Call User procedure
+ 299    GOTO[*RET4]                                  FN90;Line jump
+ 300    *[FAILED4]                                   FN601;Label
+ 301    V%[37] = 1                                   FN624;Substitution
+ 302    CallProc OutputError()                       FN806;Call User procedure
+ 303    *[RET4]                                      FN601;Label
+ 304    EndProc                                      FN804;End User procedure
+ 305    REM["Move relatively"]                       FN99;Comment
+ 306    UsrProc ProcMoveRel()                        FN802;User procedure
+ 307    REM["Result"]                                FN99;Comment
+ 308    V%[35] = V%[32]+V%[33]+V%[41]+V%[42]+V%[43]+V%[44]+V%[45]+V%[46]+V%[47]+V%[48] FN624;Substitution
+ 309    V%[38] = 6                                   FN624;Substitution
+ 310    IF V%[34] <> V%[35] THEN *FAILED5            FN602;Condition
+ 311    IF V%[48] <> 0                               FN676;IF Condition
+ 312    V%[18] = 1                                   FN624;Substitution
+ 313    IF V%[44] <> 0 OR V%[45] <> 0 OR V%[46] <> 0 THEN *FAILED5 FN602;Condition
+ 314    ELSE                                         FN678;ELSE
+ 315    V%[18] = 0                                   FN624;Substitution
+ 316    ENDIF                                        FN679;Condition end
+ 317    REM["Process"]                               FN99;Comment
+ 318    CallProc SetCurrentPosition()                FN806;Call User procedure
+ 319    V![1] = V![41]                               FN624;Substitution
+ 320    V![2] = V![42]                               FN624;Substitution
+ 321    V![3] = V![43]                               FN624;Substitution
+ 322    V![4] = V![46]                               FN624;Substitution
+ 323    V![5] = V![45]                               FN624;Substitution
+ 324    V![6] = V![44]                               FN624;Substitution
+ 325    V![31] = V%[41]                              FN624;Substitution
+ 326    V![32] = V%[42]                              FN624;Substitution
+ 327    V![33] = V%[43]                              FN624;Substitution
+ 328    V![34] = V%[44]                              FN624;Substitution
+ 329    V![35] = V%[45]                              FN624;Substitution
+ 330    V![36] = V%[46]                              FN624;Substitution
+ 331    V![21] = V![31]/1000                         FN624;Substitution
+ 332    V![22] = V![32]/1000                         FN624;Substitution
+ 333    V![23] = V![33]/1000                         FN624;Substitution
+ 334    V![4] = V![4]+V![34]/10                      FN624;Substitution
+ 335    V![5] = V![5]+V![35]/10                      FN624;Substitution
+ 336    V![6] = V![6]+V![36]/10                      FN624;Substitution
+ 337    V%[17] = 1                                   FN624;Substitution
+ 338    CallProc MoveAndWait()                       FN806;Call User procedure
+ 339    CallProc SetCurrentPosition()                FN806;Call User procedure
+ 340    REM["Conversion"]                            FN99;Comment
+ 341    V%[36] = V%[51]+V%[52]+V%[53]+V%[54]+V%[55]+V%[56] FN624;Substitution
+ 342    V%[36] = V%[36]+V%[32]+V%[33]+V%[37]         FN624;Substitution
+ 343    CallProc PrintStringCRBTComma()              FN806;Call User procedure
+ 344    CallProc PrintInteger(V%[32])                FN806;Call User procedure
+ 345    CallProc PrintStringComma()                  FN806;Call User procedure
+ 346    CallProc PrintInteger(V%[33])                FN806;Call User procedure
+ 347    CallProc PrintStringComma()                  FN806;Call User procedure
+ 348    CallProc PrintInteger(V%[37])                FN806;Call User procedure
+ 349    CallProc PrintStringComma()                  FN806;Call User procedure
+ 350    CallProc PrintInteger(V%[51])                FN806;Call User procedure
+ 351    CallProc PrintStringComma()                  FN806;Call User procedure
+ 352    CallProc PrintInteger(V%[52])                FN806;Call User procedure
+ 353    CallProc PrintStringComma()                  FN806;Call User procedure
+ 354    CallProc PrintInteger(V%[53])                FN806;Call User procedure
+ 355    CallProc PrintStringComma()                  FN806;Call User procedure
+ 356    CallProc PrintInteger(V%[54])                FN806;Call User procedure
+ 357    CallProc PrintStringComma()                  FN806;Call User procedure
+ 358    CallProc PrintInteger(V%[55])                FN806;Call User procedure
+ 359    CallProc PrintStringComma()                  FN806;Call User procedure
+ 360    CallProc PrintInteger(V%[56])                FN806;Call User procedure
+ 361    CallProc PrintStringComma()                  FN806;Call User procedure
+ 362    CallProc PrintInteger(V%[36])                FN806;Call User procedure
+ 363    GOTO[*RET5]                                  FN90;Line jump
+ 364    *[FAILED5]                                   FN601;Label
+ 365    V%[37] = 1                                   FN624;Substitution
+ 366    CallProc OutputError()                       FN806;Call User procedure
+ 367    *[RET5]                                      FN601;Label
+ 368    EndProc                                      FN804;End User procedure
+ 369    REM["Move absolutely"]                       FN99;Comment
+ 370    UsrProc ProcMoveAbs()                        FN802;User procedure
+ 371    REM["Result"]                                FN99;Comment
+ 372    V%[35] = V%[32]+V%[33]+V%[41]+V%[42]+V%[43]+V%[44]+V%[45]+V%[46] FN624;Substitution
+ 373    V%[38] = 6                                   FN624;Substitution
+ 374    IF V%[34] <> V%[35] THEN *FAILED6            FN602;Condition
+ 375    REM["Process"]                               FN99;Comment
+ 376    V![31] = V%[41]                              FN624;Substitution
+ 377    V![32] = V%[42]                              FN624;Substitution
+ 378    V![33] = V%[43]                              FN624;Substitution
+ 379    V![34] = V%[44]                              FN624;Substitution
+ 380    V![35] = V%[45]                              FN624;Substitution
+ 381    V![36] = V%[46]                              FN624;Substitution
+ 382    V![1] = V![31]/1000                          FN624;Substitution
+ 383    V![2] = V![32]/1000                          FN624;Substitution
+ 384    V![3] = V![33]/1000                          FN624;Substitution
+ 385    V![4] = V![34]/10                            FN624;Substitution
+ 386    V![5] = V![35]/10                            FN624;Substitution
+ 387    V![6] = V![36]/10                            FN624;Substitution
+ 388    V%[17] = 0                                   FN624;Substitution
+ 389    CallProc MoveAndWait()                       FN806;Call User procedure
+ 390    CallProc SetCurrentPosition()                FN806;Call User procedure
+ 391    REM["Conversion"]                            FN99;Comment
+ 392    V%[36] = V%[51]+V%[52]+V%[53]+V%[54]+V%[55]+V%[56] FN624;Substitution
+ 393    V%[36] = V%[36]+V%[32]+V%[33]+V%[37]         FN624;Substitution
+ 394    CallProc PrintStringCRBTComma()              FN806;Call User procedure
+ 395    CallProc PrintInteger(V%[32])                FN806;Call User procedure
+ 396    CallProc PrintStringComma()                  FN806;Call User procedure
+ 397    CallProc PrintInteger(V%[33])                FN806;Call User procedure
+ 398    CallProc PrintStringComma()                  FN806;Call User procedure
+ 399    CallProc PrintInteger(V%[37])                FN806;Call User procedure
+ 400    CallProc PrintStringComma()                  FN806;Call User procedure
+ 401    CallProc PrintInteger(V%[51])                FN806;Call User procedure
+ 402    CallProc PrintStringComma()                  FN806;Call User procedure
+ 403    CallProc PrintInteger(V%[52])                FN806;Call User procedure
+ 404    CallProc PrintStringComma()                  FN806;Call User procedure
+ 405    CallProc PrintInteger(V%[53])                FN806;Call User procedure
+ 406    CallProc PrintStringComma()                  FN806;Call User procedure
+ 407    CallProc PrintInteger(V%[54])                FN806;Call User procedure
+ 408    CallProc PrintStringComma()                  FN806;Call User procedure
+ 409    CallProc PrintInteger(V%[55])                FN806;Call User procedure
+ 410    CallProc PrintStringComma()                  FN806;Call User procedure
+ 411    CallProc PrintInteger(V%[56])                FN806;Call User procedure
+ 412    CallProc PrintStringComma()                  FN806;Call User procedure
+ 413    CallProc PrintInteger(V%[36])                FN806;Call User procedure
+ 414    GOTO[*RET6]                                  FN90;Line jump
+ 415    *[FAILED6]                                   FN601;Label
+ 416    V%[37] = 1                                   FN624;Substitution
+ 417    CallProc OutputError()                       FN806;Call User procedure
+ 418    *[RET6]                                      FN601;Label
+ 419    EndProc                                      FN804;End User procedure
+ 420    REM["Get version"]                           FN99;Comment
+ 421    UsrProc ProcGetVer()                         FN802;User procedure
+ 422    REM["Result"]                                FN99;Comment
+ 423    V%[35] = V%[32]+V%[33]                       FN624;Substitution
+ 424    V%[38] = 2                                   FN624;Substitution
+ 425    IF V%[34] <> V%[35] THEN *FAILED7            FN602;Condition
+ 426    REM["Process"]                               FN99;Comment
+ 427    V%[51] = V%[61]                              FN624;Substitution
+ 428    V%[52] = V%[62]                              FN624;Substitution
+ 429    REM["Conversion"]                            FN99;Comment
+ 430    V%[36] = V%[51]+V%[52]                       FN624;Substitution
+ 431    V%[36] = V%[36]+V%[32]+V%[33]+V%[37]         FN624;Substitution
+ 432    CallProc PrintStringCRBTComma()              FN806;Call User procedure
+ 433    CallProc PrintInteger(V%[32])                FN806;Call User procedure
+ 434    CallProc PrintStringComma()                  FN806;Call User procedure
+ 435    CallProc PrintInteger(V%[33])                FN806;Call User procedure
+ 436    CallProc PrintStringComma()                  FN806;Call User procedure
+ 437    CallProc PrintInteger(V%[37])                FN806;Call User procedure
+ 438    CallProc PrintStringComma()                  FN806;Call User procedure
+ 439    CallProc PrintInteger(V%[51])                FN806;Call User procedure
+ 440    CallProc PrintStringComma()                  FN806;Call User procedure
+ 441    CallProc PrintInteger(V%[52])                FN806;Call User procedure
+ 442    CallProc PrintStringComma()                  FN806;Call User procedure
+ 443    CallProc PrintInteger(V%[36])                FN806;Call User procedure
+ 444    GOTO[*RET7]                                  FN90;Line jump
+ 445    *[FAILED7]                                   FN601;Label
+ 446    V%[37] = 1                                   FN624;Substitution
+ 447    CallProc OutputError()                       FN806;Call User procedure
+ 448    *[RET7]                                      FN601;Label
+ 449    EndProc                                      FN804;End User procedure
+ 450    REM["Output an error message"]               FN99;Comment
+ 451    UsrProc OutputError()                        FN802;User procedure
+ 452    REM["Conversion"]                            FN99;Comment
+ 453    V%[36] = V%[32]+V%[33]+V%[37]                FN624;Substitution
+ 454    CallProc PrintStringCRBTComma()              FN806;Call User procedure
+ 455    CallProc PrintInteger(V%[32])                FN806;Call User procedure
+ 456    CallProc PrintStringComma()                  FN806;Call User procedure
+ 457    CallProc PrintInteger(V%[33])                FN806;Call User procedure
+ 458    CallProc PrintStringComma()                  FN806;Call User procedure
+ 459    CallProc PrintInteger(V%[37])                FN806;Call User procedure
+ 460    CallProc PrintStringComma()                  FN806;Call User procedure
+ 461    FOR V%[82] = 1 TO V%[38] STEP 1              FN604;Loop Start
+ 462    CallProc PrintStringZeroComma()              FN806;Call User procedure
+ 463    NEXT                                         FN605;Loop End
+ 464    CallProc PrintInteger(V%[36])                FN806;Call User procedure
+ 465    EndProc                                      FN804;End User procedure
+ 466    REM["Move and wait"]                         FN99;Comment
+ 467    UsrProc MoveAndWait()                        FN802;User procedure
+ 468    V![51] = V%[72]*2.5                          FN624;Substitution
+ 469    IF V%[17] <> 0                               FN676;IF Condition
+ 470    IF V%[18] <> 0                               FN676;IF Condition
+ 471    SHIFTA[1,V![21],V![22],V![23]]               FN58;XYZ shift
+ 472    ELSE                                         FN678;ELSE
+ 473    IF V%[73] = 0                                FN676;IF Condition
+ 474    SHIFTA[0,V![21],V![22],V![23]]               FN58;XYZ shift
+ 475    ELSE                                         FN678;ELSE
+ 476    CHGCOORD[V%[73]]                             FN113;Change coord. No.(shift)
+ 477    SHIFTA[2,V![21],V![22],V![23]]               FN58;XYZ shift
+ 478    CHGCOORD[0]                                  FN113;Change coord. No.(shift)
+ 479    ENDIF                                        FN679;Condition end
+ 480    ENDIF                                        FN679;Condition end
+ 481    ELSE                                         FN678;ELSE
+ 482    SHIFTA[0,0,0,0]                              FN58;XYZ shift
+ 483    ENDIF                                        FN679;Condition end
+ 484    IF V%[73] = 0                                FN676;IF Condition
+ 485    P8765 = (V![1],V![2],V![3],V![6],V![5],V![4]) FN625;Substitution
+ 486    SWITCH V%[74]                                FN686;SWITCH
+ 487    CASE 1                                       FN687;Condition
+ 488   V051!mm/s  LIN     A1 P T1  D3 S3                 V
+ 489    BREAK                                        FN688;BREAK
+ 490    CASE 2                                       FN687;Condition
+ 491   V051!mm/s  LIN     A1 P T2  D3 S3                 V
+ 492    BREAK                                        FN688;BREAK
+ 493    CASE 3                                       FN687;Condition
+ 494   V051!mm/s  LIN     A1 P T3  D3 S3                 V
+ 495    BREAK                                        FN688;BREAK
+ 496    CASE 4                                       FN687;Condition
+ 497   V051!mm/s  LIN     A1 P T4  D3 S3                 V
+ 498    BREAK                                        FN688;BREAK
+ 499    CASE 5                                       FN687;Condition
+ 500   V051!mm/s  LIN     A1 P T5  D3 S3                 V
+ 501    BREAK                                        FN688;BREAK
+ 502    CASE 6                                       FN687;Condition
+ 503   V051!mm/s  LIN     A1 P T6  D3 S3                 V
+ 504    BREAK                                        FN688;BREAK
+ 505    CASE 7                                       FN687;Condition
+ 506   V051!mm/s  LIN     A1 P T7  D3 S3                 V
+ 507    BREAK                                        FN688;BREAK
+ 508    CASE 8                                       FN687;Condition
+ 509   V051!mm/s  LIN     A1 P T8  D3 S3                 V
+ 510    BREAK                                        FN688;BREAK
+ 511    CASE 9                                       FN687;Condition
+ 512   V051!mm/s  LIN     A1 P T9  D3 S3                 V
+ 513    BREAK                                        FN688;BREAK
+ 514    ENDS                                         FN689;SWITCH end
+ 515    ELSE                                         FN678;ELSE
+ 516    CHGCOORD[V%[73]]                             FN113;Change coord. No.(shift)
+ 517    P8765 = (V![1],V![2],V![3],V![6],V![5],V![4])U FN625;Substitution
+ 518    SWITCH V%[74]                                FN686;SWITCH
+ 519    CASE 1                                       FN687;Condition
+ 520   V051!mm/s  LIN     A1 P T1  D3 S3                 V
+ 521    BREAK                                        FN688;BREAK
+ 522    CASE 2                                       FN687;Condition
+ 523   V051!mm/s  LIN     A1 P T2  D3 S3                 V
+ 524    BREAK                                        FN688;BREAK
+ 525    CASE 3                                       FN687;Condition
+ 526   V051!mm/s  LIN     A1 P T3  D3 S3                 V
+ 527    BREAK                                        FN688;BREAK
+ 528    CASE 4                                       FN687;Condition
+ 529   V051!mm/s  LIN     A1 P T4  D3 S3                 V
+ 530    BREAK                                        FN688;BREAK
+ 531    CASE 5                                       FN687;Condition
+ 532   V051!mm/s  LIN     A1 P T5  D3 S3                 V
+ 533    BREAK                                        FN688;BREAK
+ 534    CASE 6                                       FN687;Condition
+ 535   V051!mm/s  LIN     A1 P T6  D3 S3                 V
+ 536    BREAK                                        FN688;BREAK
+ 537    CASE 7                                       FN687;Condition
+ 538   V051!mm/s  LIN     A1 P T7  D3 S3                 V
+ 539    BREAK                                        FN688;BREAK
+ 540    CASE 8                                       FN687;Condition
+ 541   V051!mm/s  LIN     A1 P T8  D3 S3                 V
+ 542    BREAK                                        FN688;BREAK
+ 543    CASE 9                                       FN687;Condition
+ 544   V051!mm/s  LIN     A1 P T9  D3 S3                 V
+ 545    BREAK                                        FN688;BREAK
+ 546    ENDS                                         FN689;SWITCH end
+ 547    CHGCOORD[0]                                  FN113;Change coord. No.(shift)
+ 548    ENDIF                                        FN679;Condition end
+ 549    EndProc                                      FN804;End User procedure
+ 550    REM["Change Tool#"]                          FN99;Comment
+ 551    UsrProc ChangeToolNum()                      FN802;User procedure
+ 552    SHIFTA[0,0,0,0]                              FN58;XYZ shift
+ 553    GETANGLE[V![11]]                             FN157;Set real variable(ang)
+ 554    SWITCH V%[74]                                FN686;SWITCH
+ 555    CASE 1                                       FN687;Condition
+ 556    1.0%      LIN     A1 P T1  D3 S3                 V
+ 557    BREAK                                        FN688;BREAK
+ 558    CASE 2                                       FN687;Condition
+ 559    1.0%      LIN     A1 P T2  D3 S3                 V
+ 560    BREAK                                        FN688;BREAK
+ 561    CASE 3                                       FN687;Condition
+ 562    1.0%      LIN     A1 P T3  D3 S3                 V
+ 563    BREAK                                        FN688;BREAK
+ 564    CASE 4                                       FN687;Condition
+ 565    1.0%      LIN     A1 P T4  D3 S3                 V
+ 566    BREAK                                        FN688;BREAK
+ 567    CASE 5                                       FN687;Condition
+ 568    1.0%      LIN     A1 P T5  D3 S3                 V
+ 569    BREAK                                        FN688;BREAK
+ 570    CASE 6                                       FN687;Condition
+ 571    1.0%      LIN     A1 P T6  D3 S3                 V
+ 572    BREAK                                        FN688;BREAK
+ 573    CASE 7                                       FN687;Condition
+ 574    1.0%      LIN     A1 P T7  D3 S3                 V
+ 575    BREAK                                        FN688;BREAK
+ 576    CASE 8                                       FN687;Condition
+ 577    1.0%      LIN     A1 P T8  D3 S3                 V
+ 578    BREAK                                        FN688;BREAK
+ 579    CASE 9                                       FN687;Condition
+ 580    1.0%      LIN     A1 P T9  D3 S3                 V
+ 581    BREAK                                        FN688;BREAK
+ 582    ENDS                                         FN689;SWITCH end
+ 583    EndProc                                      FN804;End User procedure
+ 584    REM["Set current position"]                  FN99;Comment
+ 585    UsrProc SetCurrentPosition()                 FN802;User procedure
+ 586    INH                                          FN310;Inhibit
+ 587    IF V%[73] = 0                                FN676;IF Condition
+ 588    GETPOS[0,1,posCurrent,1,V%[74]]              FN822;Set position variable (pos.data)
+ 589    ELSE                                         FN678;ELSE
+ 590    GETPOS[0,1,posCurrent,2,V%[73]]              FN822;Set position variable (pos.data)
+ 591    ENDIF                                        FN679;Condition end
+ 592    INH                                          FN310;Inhibit
+ 593    OPEPOS[0,posCurrent,V![41],0,0]              FN826;Extraction position variable
+ 594    V%[51] = V![41]*1000                         FN624;Substitution
+ 595    V%[52] = V![42]*1000                         FN624;Substitution
+ 596    V%[53] = V![43]*1000                         FN624;Substitution
+ 597    V%[54] = V![46]*10                           FN624;Substitution
+ 598    V%[55] = V![45]*10                           FN624;Substitution
+ 599    V%[56] = V![44]*10                           FN624;Substitution
+ 600    EndProc                                      FN804;End User procedure
+ 601    REM["Print"]                                 FN99;Comment
+ 602    UsrProc PrintStringZeroComma()               FN802;User procedure
+ 603    V$[5] = "0,"                                 FN624;Substitution
+ 604    CallProc PrintString()                       FN806;Call User procedure
+ 605    EndProc                                      FN804;End User procedure
+ 606    REM["Print"]                                 FN99;Comment
+ 607    UsrProc PrintStringCRBTComma()               FN802;User procedure
+ 608    V$[5] = "CRBT,"                              FN624;Substitution
+ 609    CallProc PrintString()                       FN806;Call User procedure
+ 610    EndProc                                      FN804;End User procedure
+ 611    REM["Print"]                                 FN99;Comment
+ 612    UsrProc PrintStringComma()                   FN802;User procedure
+ 613    V$[5] = ","                                  FN624;Substitution
+ 614    CallProc PrintString()                       FN806;Call User procedure
+ 615    EndProc                                      FN804;End User procedure
+ 616    REM["Print"]                                 FN99;Comment
+ 617    UsrProc PrintInteger(pInt As INTEGER)        FN802;User procedure
+ 618    V%[91] = 1000000000                          FN624;Substitution
+ 619    IF pInt = -2147483648                        FN676;IF Condition
+ 620    V$[5] = "-2147483648"                        FN624;Substitution
+ 621    GOTO[*CONV_END]                              FN90;Line jump
+ 622    ENDIF                                        FN679;Condition end
+ 623    IF pInt < 0                                  FN676;IF Condition
+ 624    pInt = -pInt                                 FN624;Substitution
+ 625    V$[5] = "-"                                  FN624;Substitution
+ 626    ELSE                                         FN678;ELSE
+ 627    V$[5] = ""                                   FN624;Substitution
+ 628    ENDIF                                        FN679;Condition end
+ 629    V%[93] = 0                                   FN624;Substitution
+ 630    *[CONV_LOOP]                                 FN601;Label
+ 631    IF pInt >= V%[91]                            FN676;IF Condition
+ 632    V%[93] = 1                                   FN624;Substitution
+ 633    ENDIF                                        FN679;Condition end
+ 634    V%[92] = pInt/V%[91]                         FN624;Substitution
+ 635    pInt = pInt-V%[92]*V%[91]                    FN624;Substitution
+ 636    V%[91] = V%[91]/10                           FN624;Substitution
+ 637    IF V%[93] <> 0 OR V%[91] = 0                 FN676;IF Condition
+ 638    V$[6] = CHR$(V%[92]+48)                      FN624;Substitution
+ 639    V$[5] = V$[5]+V$[6]                          FN624;Substitution
+ 640    ENDIF                                        FN679;Condition end
+ 641    IF V%[91] = 0 THEN *CONV_END                 FN602;Condition
+ 642    GOTO[*CONV_LOOP]                             FN90;Line jump
+ 643    *[CONV_END]                                  FN601;Label
+ 644    CallProc PrintString()                       FN806;Call User procedure
+ 645    EndProc                                      FN804;End User procedure
+ 646    REM["Print"]                                 FN99;Comment
+ 647    UsrProc PrintString()                        FN802;User procedure
+ 648    V$[3] = V$[3]+V$[5]                          FN624;Substitution
+ 649    EndProc                                      FN804;End User procedure
+ 650    REM["Recieve to a buffer"]                   FN99;Comment
+ 651    UsrProc SpritToString()                      FN802;User procedure
+ 652    V%[31] = 1                                   FN624;Substitution
+ 653    V$[V%[31]+10] = ""                           FN624;Substitution
+ 654    V$[7] = RIGHT$(V$[8],98-V%[14]+1)+V$[9]      FN624;Substitution
+ 655    FOR V%[83] = 1 TO 98 STEP 1                  FN604;Loop Start
+ 656    V$[2] = MID$(V$[7],V%[83],1)                 FN624;Substitution
+ 657    IF "," = V$[2]                               FN676;IF Condition
+ 658    V%[31] = V%[31]+1                            FN624;Substitution
+ 659    V$[V%[31]+10] = ""                           FN624;Substitution
+ 660    ELSE                                         FN678;ELSE
+ 661    V$[V%[31]+10] = V$[V%[31]+10]+V$[2]          FN624;Substitution
+ 662    ENDIF                                        FN679;Condition end
+ 663    NEXT                                         FN605;Loop End
+ 664    EndProc                                      FN804;End User procedure
+Program List End

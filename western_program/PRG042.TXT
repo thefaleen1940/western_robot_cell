@@ -1,0 +1,21 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.042(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Regrip gripper open"]                   FN99;Comment
+   2    REM["----------------------------------"]    FN99;Comment
+   3    *[Top]                                       FN601;Label
+   4    SETMD[O93,1,0,1]                             FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Regrip gripper open
+   5    WAITI[I93]                                   FN525;Wait Input cond
+                  Signal Name :Regrip gripper open
+   6    DELAY[0.1]                                   FN50;Timer delay
+   7    END                                          FN92;End
+   8    REM[""]                                      FN99;Comment
+   9    REM["Alarm, flip gripper failed to open"]    FN99;Comment
+  10    REM["----------------------------------"]    FN99;Comment
+  11    SETMD[O58,1,0,1]                             FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Alarm8
+  12    DELAY[0.5]                                   FN50;Timer delay
+  13    GOTO[1]                                      FN90;Line jump
+  14    END                                          FN92;End
+Program List End

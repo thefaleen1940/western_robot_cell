@@ -1,0 +1,31 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.015(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Main Part 1 Insert"]                    FN99;Comment
+   2    REM["---------------------------------"]     FN99;Comment
+   3    *[LBL2]                                      FN601;Label
+   4    REM["---------------------------------"]     FN99;Comment
+   5    IF I0002=0 THEN 6 ELSE 7                     FN602;Condition
+   6    CALLP[100]                                   FN80;Program call
+                  Program Name:Infeed Program G1
+   7    REM["Wait for a machine to be ready"]        FN99;Comment
+   8    WAITI[I5101]                                 FN525;Wait Input cond
+                  Signal Name :A machine is ready
+   9    REM["---------------------------------"]     FN99;Comment
+  10    REM["Left MC Ready"]                         FN99;Comment
+  11    IF I1002=1 THEN 21 ELSE 13                   FN602;Condition
+  12    REM["---------------------------------"]     FN99;Comment
+  13    REM["Right MC Ready"]                        FN99;Comment
+  14    IF I1010=1 THEN 17 ELSE 8                    FN602;Condition
+  15    REM[""]                                      FN99;Comment
+  16    REM["----------------------------------"]    FN99;Comment
+  17    REM["Service Left MC "]                      FN99;Comment
+  18    CALLP[121]                                   FN80;Program call
+                  Program Name:Right MC Service Part 1
+  19    GOTO[3]                                      FN90;Line jump
+  20    REM["Service Right MC "]                     FN99;Comment
+  21    CALLP[110]                                   FN80;Program call
+                  Program Name:Left MC Service Part 1 
+  22    GOTO[3]                                      FN90;Line jump
+  23    END                                          FN92;End
+Program List End

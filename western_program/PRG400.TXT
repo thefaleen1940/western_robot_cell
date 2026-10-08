@@ -1,0 +1,18 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.400(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Outfeed Approach"]                      FN99;Comment
+   2    REM["----------------------------------"]    FN99;Comment
+   3   50.0%      JOINT   A2   T1  D1                    V
+                  'At outfeed
+   4    REM[""]                                      FN99;Comment
+   5    REM["Wait for outfeed clear"]                FN99;Comment
+   6    WAITJ[I1027]                                 FN526;Wait not Input cond
+                  Signal Name :OutConv full
+   7    REM["----------------------------------"]    FN99;Comment
+   8    DELAY[0.5]                                   FN50;Timer delay
+   9    SETM[O9,0]                                   FN105;Output signal
+                  Signal Name :Clear of conveyors
+  10    REM[""]                                      FN99;Comment
+  11    END                                          FN92;End
+Program List End

@@ -1,0 +1,15 @@
+1,MC1 RDY to load
+2,MC1 ready
+3,MC1 part clamped
+4,MC1 part unclamped
+5,MC1 door opened
+6,MC1 door closed
+7,MC1 door closed
+8,MC1 clamp F 2
+9,MC1 unclamp F 2
+10,MC1 loading part
+11,MC1 load complete
+12,MC1 robot fault
+13,MC1 robot fault
+14,MC1 robot fault
+

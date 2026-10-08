@@ -1,0 +1,15 @@
+1,MC2 RDY to load
+2,MC2 RDY 
+3,MC2 part clamped
+4,MC2 part unclamped
+5,MC2 door opened
+6,MC2 door closed
+7,MC 2 Fx 1 UnClamp
+8,MC 2 Clamp Fx 1
+9,MC2 clamp part
+10,MC2 unclamp part
+11,MC2 loading part
+12,MC2 load complete
+13,MC2 robot fault
+14,MC2 Service Complete
+

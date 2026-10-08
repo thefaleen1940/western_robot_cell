@@ -1,0 +1,21 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.019(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Vision grip pick"]                      FN99;Comment
+   2    REM["----------------------------------"]    FN99;Comment
+   3    *[Top]                                       FN601;Label
+   4    SETMD[O1018,1,0,1]                           FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Gripper1 close
+   5    WAIT[I1018,1,10]                             FN552;Wait I-cond with timer
+                  Signal Name :Gripper 1 closed
+   6    END                                          FN92;End
+   7    REM[""]                                      FN99;Comment
+   8    REM["Alarm, gripper1 failed to close"]       FN99;Comment
+   9    REM["----------------------------------"]    FN99;Comment
+  10    IF I1017 THEN 11 ELSE 14                     FN602;Condition
+  11    SETMD[O53,1,0,1]                             FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Alarm3
+  12    DELAY[1]                                     FN50;Timer delay
+  13    GOTO[1]                                      FN90;Line jump
+  14    END                                          FN92;End
+Program List End

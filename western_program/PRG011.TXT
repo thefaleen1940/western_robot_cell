@@ -1,0 +1,11 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.011(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Home check"]                            FN99;Comment
+   2    IF I0001=1 THEN 6 ELSE 3                     FN602;Condition
+   3    SETMD[O51,1,0,1]                             FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Alarm1
+   4    DELAY[0.5]                                   FN50;Timer delay
+   5    GOTO[1]                                      FN90;Line jump
+   6    END                                          FN92;End
+Program List End

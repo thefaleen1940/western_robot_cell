@@ -1,0 +1,55 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.121(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Right MC Service Part 1"]               FN99;Comment
+   2    REM["----------------------------------"]    FN99;Comment
+   3    REM["I-0002 Gripper 1 Part Pres"]            FN99;Comment
+   4    IF I0002=1 THEN 5 ELSE 34                    FN602;Condition
+   5    REM["----------------------------------"]    FN99;Comment
+   6    CALLP[302]                                   FN80;Program call
+                  Program Name:Right MC Wait for ready
+   7    CALLP[300]                                   FN80;Program call
+                  Program Name:Right MC Enter
+   8    CALLP[303]                                   FN80;Program call
+                  Program Name:Right MC Blowoff 
+   9    CALLP[331]                                   FN80;Program call
+                  Program Name:Right MC Unload Part 1 OP 10
+  10    CALLP[304]                                   FN80;Program call
+                  Program Name:Right MC Blowoff OP 10
+  11    CALLP[321]                                   FN80;Program call
+                  Program Name:Right MC Load Part 1 OP 10
+  12    CALLP[301]                                   FN80;Program call
+                  Program Name:Right MC Exit
+  13    REM["----------------------------------"]    FN99;Comment
+  14    IF I0003=1 THEN 15 ELSE 26                   FN602;Condition
+  15    CALLP[51]                                    FN80;Program call
+                  Program Name:Flip Station Right MC Part 1
+  16    REM["----------------------------------"]    FN99;Comment
+  17    CALLP[302]                                   FN80;Program call
+                  Program Name:Right MC Wait for ready
+  18    CALLP[300]                                   FN80;Program call
+                  Program Name:Right MC Enter
+  19    CALLP[335]                                   FN80;Program call
+                  Program Name:Right MC Unload Part 1 OP 20
+  20    CALLP[307]                                   FN80;Program call
+                  Program Name:Right MC Blowoff OP 20
+  21    CALLP[325]                                   FN80;Program call
+                  Program Name:Right MC Load Part 1 OP 20
+  22    REM["----------------------------------"]    FN99;Comment
+  23    REM["Exit machine"]                          FN99;Comment
+  24    CALLP[301]                                   FN80;Program call
+                  Program Name:Right MC Exit
+  25    REM["----------------------------------"]    FN99;Comment
+  26    REM["Robot Clear of Machine"]                FN99;Comment
+  27    SETM[O1013,0]                                FN105;Output signal
+                  Signal Name :Right MC Robot In MC
+  28    REM["Cycle Start Machine"]                   FN99;Comment
+  29    CALLP[305]                                   FN80;Program call
+                  Program Name:Right MC Start
+  30    REM["----------------------------------"]    FN99;Comment
+  31    IF I0003=1 THEN 32 ELSE 33                   FN602;Condition
+  32    CALLP[420]                                   FN80;Program call
+                  Program Name:Outfeed Right MC Part 1
+  33    REM["-------------------------"]             FN99;Comment
+  34    END                                          FN92;End
+Program List End

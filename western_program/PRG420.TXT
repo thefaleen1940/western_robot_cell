@@ -1,0 +1,85 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.420(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Outfeed Right MC Part 1"]               FN99;Comment
+   2    REM["---------------------------"]           FN99;Comment
+   3    REM["Right MC QC Check "]                    FN99;Comment
+   4    IF V305%>=V311% OR I1041=1 THEN 5 ELSE 7     FN602;Condition
+   5    CALLP[471]                                   FN80;Program call
+                  Program Name:QC Drop Right MC
+   6    JMP[56]                                      FN20;Step jump
+   7    CALLP[400]                                   FN80;Program call
+                  Program Name:Outfeed Approach
+   8    REM["---------------------------"]           FN99;Comment
+   9    IF V121%<=1 THEN 10 ELSE 19                  FN602;Condition
+  10    750mm/s   LIN     A2   T2     S1                 V
+                  'Load
+  11    500mm/s   LIN     A1   T2     S1                 V
+                  'Load
+  12    100mm/s   LIN     A1 P T2     S2                 V
+  13    CALLP[20]                                    FN80;Program call
+                  Program Name:Gripper 2 Open
+  14    DELAY[0.2]                                   FN50;Timer delay
+  15    750mm/s   LIN     A2   T2     S1                 V
+                  'Clear
+  16    LETVI[V121%,2]                               FN75;Set integer variable
+  17   1000mm/s   LIN     A3   T2     S1                 V
+                  'Load
+  18    GOTO[52]                                     FN90;Line jump
+  19    IF V121%=2 THEN 20 ELSE 29                   FN602;Condition
+  20    750mm/s   LIN     A2   T2     S1                 V
+                  'Load
+  21    500mm/s   LIN     A1   T2     S1                 V
+                  'Load
+  22    100mm/s   LIN     A1 P T2     S2                 V
+  23    CALLP[20]                                    FN80;Program call
+                  Program Name:Gripper 2 Open
+  24    DELAY[0.2]                                   FN50;Timer delay
+  25    750mm/s   LIN     A2   T2     S1                 V
+                  'Clear
+  26    LETVI[V121%,3]                               FN75;Set integer variable
+  27   1000mm/s   LIN     A3   T2     S1                 V
+                  'Load
+  28    GOTO[52]                                     FN90;Line jump
+  29    IF V121%=3 THEN 30 ELSE 39                   FN602;Condition
+  30    750mm/s   LIN     A2   T2     S1                 V
+                  'Load
+  31    500mm/s   LIN     A1   T2     S1                 V
+                  'Load
+  32    100mm/s   LIN     A1 P T2     S2                 V
+  33    CALLP[20]                                    FN80;Program call
+                  Program Name:Gripper 2 Open
+  34    DELAY[0.2]                                   FN50;Timer delay
+  35    500mm/s   LIN     A3   T2     S1                 V
+                  'Clear
+  36    LETVI[V121%,4]                               FN75;Set integer variable
+  37    750mm/s   LIN     A2   T2     S1                 V
+                  'Load
+  38    GOTO[52]                                     FN90;Line jump
+  39    IF V121%=4 THEN 40 ELSE 40                   FN602;Condition
+  40    750mm/s   LIN     A2   T2     S1                 V
+                  'Load
+  41    500mm/s   LIN     A1   T2     S1                 V
+                  'Load
+  42    100mm/s   LIN     A1 P T2     S2                 V
+  43    CALLP[20]                                    FN80;Program call
+                  Program Name:Gripper 2 Open
+  44    DELAY[0.2]                                   FN50;Timer delay
+  45    500mm/s   LIN     A3   T2     S1                 V
+                  'Clear
+  46    750mm/s   LIN     A2   T2     S1                 V
+                  'Load
+  47    SETMD[O13,1,0,1]                             FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Outfeed Clear
+  48    DELAY[2]                                     FN50;Timer delay
+  49    LETVI[V120%,0]                               FN75;Set integer variable
+  50    LETVI[V121%,0]                               FN75;Set integer variable
+  51    REM[""]                                      FN99;Comment
+  52    REM["Add To QC Count Left"]                  FN99;Comment
+  53    LETVI[V305%,V305%+1]                         FN75;Set integer variable
+  54    WAITJ[I1035]                                 FN526;Wait not Input cond
+                  Signal Name :OutConv drive running
+  55    CALLP[401]                                   FN80;Program call
+                  Program Name:Outfeed Clear
+  56    END                                          FN92;End
+Program List End

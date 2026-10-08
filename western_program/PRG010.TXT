@@ -1,0 +1,38 @@
+Program List                            10/08/26(Month/Day/Year)
+UNIT1(Unit Name)                        MZ12-01.010(Program Name)
+MZ12-01(Mechanism Name)
+   1    REM["Init data"]                             FN99;Comment
+   2    SETM[O1017,0]                                FN105;Output signal
+                  Signal Name :Gripper1 open
+   3    SETM[O1018,0]                                FN105;Output signal
+                  Signal Name :Gripper1 close
+   4    SETM[O1019,0]                                FN105;Output signal
+                  Signal Name :Gripper2 open
+   5    SETM[O1020,0]                                FN105;Output signal
+                  Signal Name :Gripper2 close
+   6    SETM[O1030,0]                                FN105;Output signal
+                  Signal Name :Vision lights on
+   7    SETM[O1031,0]                                FN105;Output signal
+                  Signal Name :Vision lights off
+   8    LETVI[V5%,0]                                 FN75;Set integer variable
+   9    LETVI[V6%,0]                                 FN75;Set integer variable
+  10    LETVI[V7%,0]                                 FN75;Set integer variable
+  11    LETVI[V315%,0]                               FN75;Set integer variable
+  12    LETVI[V105%,1]                               FN75;Set integer variable
+  13    LETVI[V106%,1]                               FN75;Set integer variable
+  14    LETVI[V318%,0]                               FN75;Set integer variable
+  15    SETM[O91,0]                                  FN105;Output signal
+                  Signal Name :Flip position 1
+  16    SETM[O92,0]                                  FN105;Output signal
+                  Signal Name :Flip position 2
+  17    SETM[O93,0]                                  FN105;Output signal
+                  Signal Name :Regrip gripper open
+  18    SETM[O94,0]                                  FN105;Output signal
+                  Signal Name :Regrip gripper close
+  19    SETM[O9,1]                                   FN105;Output signal
+                  Signal Name :Clear of conveyors
+  20    SETMD[O1032,1,0,1]                           FN35;Output sig(ON/OFF/delay/pulse)
+  21    SETMD[O13,1,0,2]                             FN35;Output sig(ON/OFF/delay/pulse)
+                  Signal Name :Outfeed Clear
+  22    END                                          FN92;End
+Program List End
